@@ -33,9 +33,24 @@ public:
 		Winches::initialize();
 	}
 
-	void Autonomous()
+	void Disabled()
 	{
 		char message[1023];
+		while (!IsEnabled()) {
+			snprintf(message, 1023, "sees goal: %d, shooter angle: %.2f, shooter rpm: %.2f, intake angle: %.2f, ball switch: %d, home switch: %d, lidar dist: %d",
+				Cameras::canSeeGoal(),
+				Sensors::getShooterAngle(),
+				Sensors::getShooterAngle(),
+				Sensors::getIntakeAngle(),
+				Sensors::isBallLimitPressed(),
+				Sensors::isShooterLimitPressed(),
+				Sensors::getLidarDistance());
+			DriverStation::ReportError(message);
+		}
+	}
+
+	void Autonomous()
+	{
 		while (IsEnabled() && IsAutonomous()) {
 			Cameras::process();
 			ClimberArm::process();
@@ -47,15 +62,6 @@ public:
 			ShooterPitch::process();
 			ShooterWheels::process();
 			Winches::process();
-
-			snprintf(message, 1023, "sees goal: %d, shooter angle: %.2f, intake angle: %.2f, ball switch: %d, home switch: %d, lidar dist: %d",
-					Cameras::canSeeGoal(),
-					Sensors::getShooterAngle(),
-					Sensors::getIntakeAngle(),
-					Sensors::isBallLimitPressed(),
-					Sensors::isShooterLimitPressed(),
-					Sensors::getLidarDistance());
-			DriverStation::ReportError(message);
 		}
 	}
 
