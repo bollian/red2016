@@ -1,11 +1,11 @@
 #include <NAVX/AHRS.h>
-#include <Ports/Analog.h>
-#include <Ports/CAN.h>
-#include <Ports/Digital.h>
-#include <Ports/I2C.h>
-#include <Subsystems/Mobility.h>
-#include <Subsystems/Sensors.h>
-#include <Utils.h>
+#include <Ports/Analog.hpp>
+#include <Ports/CAN.hpp>
+#include <Ports/Digital.hpp>
+#include <Ports/I2C.hpp>
+#include <Subsystems/Mobility.hpp>
+#include <Subsystems/Sensors.hpp>
+#include <Utils.hpp>
 #include <WPILib.h>
 
 // get access to pi const: M_PI

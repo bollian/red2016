@@ -1,6 +1,6 @@
-#include <Ports/OI.h>
-#include <Subsystems/Mobility.h>
-#include <Subsystems/OI.h>
+#include <Ports/OI.hpp>
+#include <Subsystems/Mobility.hpp>
+#include <Subsystems/OI.hpp>
 #include <WPILib.h>
 
 namespace OI

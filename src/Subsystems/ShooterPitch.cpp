@@ -1,7 +1,7 @@
-#include <Ports/Motor.h>
-#include <Subsystems/Sensors.h>
-#include <Subsystems/ShooterPitch.h>
-#include <Utils.h>
+#include <Ports/Motor.hpp>
+#include <Subsystems/Sensors.hpp>
+#include <Subsystems/ShooterPitch.hpp>
+#include <Utils.hpp>
 #include <WPILib.h>
 
 namespace ShooterPitch

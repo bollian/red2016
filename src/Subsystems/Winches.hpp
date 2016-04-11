@@ -1,7 +1,7 @@
 #ifndef SRC_WINCHES_H_
 #define SRC_WINCHES_H_
 
-#include <Utils.h>
+#include <Utils.hpp>
 
 namespace Winches
 {

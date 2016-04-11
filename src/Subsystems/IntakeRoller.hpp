@@ -1,7 +1,7 @@
 #ifndef SRC_SUBSYSTEMS_INTAKEROLLER_H_
 #define SRC_SUBSYSTEMS_INTAKEROLLER_H_
 
-#include <Utils.h>
+#include <Utils.hpp>
 
 namespace IntakeRoller
 {

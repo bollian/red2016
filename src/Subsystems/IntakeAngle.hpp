@@ -1,19 +1,18 @@
-#ifndef SRC_SHOOTERPITCH_H_
-#define SRC_SHOOTERPITCH_H_
+#ifndef SRC_SUBSYSTEMS_INTAKEANGLE_H_
+#define SRC_SUBSYSTEMS_INTAKEANGLE_H_
 
-#include <Utils.h>
+#include <Utils.hpp>
 
-namespace ShooterPitch
+namespace IntakeAngle
 {
-	extern const float SHOOTER_TO_TARGET_HEIGHT;
-
 	void initialize();
 	void process();
 
 	void setSpeed(float speed);
 	void setDirection(Utils::VerticalDirection dir);
+
 	float getSpeed();
 	Utils::VerticalDirection getDirection();
 }
 
-#endif /* SRC_SHOOTERPITCH_H_ */
+#endif /* SRC_SUBSYSTEMS_INTAKEANGLE_H_ */

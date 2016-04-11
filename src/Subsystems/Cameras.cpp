@@ -1,6 +1,6 @@
 #include <memory>
-#include <Subsystems/Cameras.h>
-#include <Subsystems/ShooterPitch.h>
+#include <Subsystems/Cameras.hpp>
+#include <Subsystems/ShooterPitch.hpp>
 #include <WPILib.h>
 
 using namespace std;
@@ -112,7 +112,7 @@ namespace Cameras
 
 	float getDistanceFromTarget()
 	{
-		if(canSeeGoal()) {
+		if (canSeeGoal()) {
 			return HEIGHT_DISTANCE_RATIO * IMAGE_HEIGHT / target.height;
 		}
 		else {

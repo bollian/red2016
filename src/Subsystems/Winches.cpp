@@ -1,6 +1,6 @@
-#include <Ports/Motor.h>
-#include <Subsystems/Winches.h>
-#include <Utils.h>
+#include <Ports/Motor.hpp>
+#include <Subsystems/Winches.hpp>
+#include <Utils.hpp>
 #include <WPILib.h>
 
 namespace Winches

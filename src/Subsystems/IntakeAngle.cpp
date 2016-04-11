@@ -1,6 +1,6 @@
-#include <Ports/Motor.h>
-#include <Subsystems/IntakeAngle.h>
-#include <Utils.h>
+#include <Ports/Motor.hpp>
+#include <Subsystems/IntakeAngle.hpp>
+#include <Utils.hpp>
 #include <WPILib.h>
 
 namespace IntakeAngle

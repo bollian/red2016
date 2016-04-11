@@ -1,6 +1,6 @@
-#include <Ports/Motor.h>
-#include <Subsystems/ShooterWheels.h>
-#include <Utils.h>
+#include <Ports/Motor.hpp>
+#include <Subsystems/ShooterWheels.hpp>
+#include <Utils.hpp>
 #include <WPILib.h>
 
 namespace ShooterWheels

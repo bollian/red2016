@@ -1,6 +1,6 @@
-#include <Ports/Motor.h>
-#include <Subsystems/ClimberArm.h>
-#include <Utils.h>
+#include <Ports/Motor.hpp>
+#include <Subsystems/ClimberArm.hpp>
+#include <Utils.hpp>
 #include <WPILib.h>
 
 namespace ClimberArm

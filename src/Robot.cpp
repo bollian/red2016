@@ -1,14 +1,14 @@
-#include <Subsystems/Cameras.h>
-#include <Subsystems/ClimberArm.h>
-#include <Subsystems/HolderWheels.h>
-#include <Subsystems/IntakeAngle.h>
-#include <Subsystems/IntakeRoller.h>
-#include <Subsystems/Mobility.h>
-#include <Subsystems/OI.h>
-#include <Subsystems/Sensors.h>
-#include <Subsystems/ShooterPitch.h>
-#include <Subsystems/ShooterWheels.h>
-#include <Subsystems/Winches.h>
+#include <Subsystems/Cameras.hpp>
+#include <Subsystems/ClimberArm.hpp>
+#include <Subsystems/HolderWheels.hpp>
+#include <Subsystems/IntakeAngle.hpp>
+#include <Subsystems/IntakeRoller.hpp>
+#include <Subsystems/Mobility.hpp>
+#include <Subsystems/OI.hpp>
+#include <Subsystems/Sensors.hpp>
+#include <Subsystems/ShooterPitch.hpp>
+#include <Subsystems/ShooterWheels.hpp>
+#include <Subsystems/Winches.hpp>
 #include <WPILib.h>
 
 class Robot: public SampleRobot
