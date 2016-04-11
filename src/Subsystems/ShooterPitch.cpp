@@ -9,11 +9,11 @@ namespace ShooterPitch
 	const float SHOOTER_TO_TARGET_HEIGHT = 45.72; // cm
 	const float MOTOR_SPEED = 1.0;
 
-	SpeedController* pitch_motor = Utils::constructMotor(MotorPorts::SHOOTER_PITCH_MOTOR);
+	SpeedController* pitch_motor;
 
 	void initialize()
 	{
-
+		pitch_motor = Utils::constructMotor(MotorPorts::SHOOTER_PITCH_MOTOR);
 	}
 
 	void process()

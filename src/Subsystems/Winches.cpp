@@ -7,12 +7,13 @@ namespace Winches
 {
 	const float WINCH_SPEED = 1.0;
 
-	SpeedController* front_winch = Utils::constructMotor(MotorPorts::FRONT_WINCH_MOTOR);
-	SpeedController* back_winch = Utils::constructMotor(MotorPorts::BACK_WINCH_MOTOR);
+	SpeedController* front_winch;
+	SpeedController* back_winch;
 
 	void initialize()
 	{
-
+		front_winch = Utils::constructMotor(MotorPorts::FRONT_WINCH_MOTOR);
+		back_winch = Utils::constructMotor(MotorPorts::BACK_WINCH_MOTOR);
 	}
 
 	void process()

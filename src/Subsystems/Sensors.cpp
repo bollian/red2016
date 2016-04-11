@@ -30,34 +30,54 @@ namespace Sensors
 
 	float getShooterAngleActual();
 
-	AHRS* navx = new AHRS(SPI::Port::kMXP);
+	AHRS* navx;
 
-	AnalogInput* shooter_encoder = new AnalogInput(AnalogPorts::SHOOTER_ENCODER);
+	AnalogInput* shooter_encoder;
 	int shooter_angle_offset = 0;
 
-	AnalogInput* intake_encoder = new AnalogInput(AnalogPorts::INTAKE_ENCODER);
+	AnalogInput* intake_encoder;
 
-	Timer* tach_timer = new Timer();
-	Counter* shooter_wheel_tach = new Counter(DigitalPorts::SHOOTER_WHEEL_TACH);
+	Timer* tach_timer;
+	Counter* shooter_wheel_tach;
 	float last_tach_timestamp = 0.0;
 	int last_tach_count = 0;
 	float tach_rate = 0.0;
 
-	Timer* lidar_timer = new Timer();
-	I2C* lidar = new I2C(I2C::Port::kMXP, I2CPorts::LIDAR_ADDRESS);
+	Timer* lidar_timer;
+	I2C* lidar;
 	int lidar_distance = 0; // centimeters
 	int lidar_stage = 0;
 
-	Encoder* left_drive_encoder = new Encoder(DigitalPorts::LEFT_ENCODER_A, DigitalPorts::LEFT_ENCODER_B);
-	Encoder* right_drive_encoder = new Encoder(DigitalPorts::RIGHT_ENCODER_A, DigitalPorts::RIGHT_ENCODER_B, true); // the right encoder goes in reverse
+	Encoder* left_drive_encoder;
+	Encoder* right_drive_encoder;
 
-	DigitalInput* ball_limit = new DigitalInput(DigitalPorts::BALL_LIMIT);
-	DigitalInput* shooter_limit = new DigitalInput(DigitalPorts::SHOOTER_LIMIT);
+	DigitalInput* ball_limit;
+	DigitalInput* shooter_limit;
 
-	PowerDistributionPanel* pdp = new PowerDistributionPanel(CANPorts::PDP);
+	PowerDistributionPanel* pdp;
 
 	void initialize()
 	{
+		navx = new AHRS(SPI::Port::kMXP);
+
+		shooter_encoder = new AnalogInput(AnalogPorts::SHOOTER_ENCODER);
+
+		intake_encoder = new AnalogInput(AnalogPorts::INTAKE_ENCODER);
+
+		tach_timer = new Timer();
+		shooter_wheel_tach = new Counter(DigitalPorts::SHOOTER_WHEEL_TACH);
+
+		lidar_timer = new Timer();
+		lidar = new I2C(I2C::Port::kMXP, I2CPorts::LIDAR_ADDRESS);
+
+		left_drive_encoder = new Encoder(DigitalPorts::LEFT_ENCODER_A, DigitalPorts::LEFT_ENCODER_B);
+		right_drive_encoder = new Encoder(DigitalPorts::RIGHT_ENCODER_A, DigitalPorts::RIGHT_ENCODER_B, true); // the right encoder goes in reverse
+
+		ball_limit = new DigitalInput(DigitalPorts::BALL_LIMIT);
+		shooter_limit = new DigitalInput(DigitalPorts::SHOOTER_LIMIT);
+
+		pdp = new PowerDistributionPanel(CANPorts::PDP);
+
 		float distance_per_pulse = 2.0 * M_PI * DRIVE_WHEEL_DIAMETER / (float)DRIVE_ENCODER_PPR;
 		left_drive_encoder->SetDistancePerPulse(distance_per_pulse);
 		right_drive_encoder->SetDistancePerPulse(distance_per_pulse);

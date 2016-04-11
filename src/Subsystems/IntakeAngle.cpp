@@ -7,11 +7,11 @@ namespace IntakeAngle
 {
 	const float MOTOR_SPEED = 0.5;
 
-	SpeedController* angle_motor = Utils::constructMotor(MotorPorts::INTAKE_ANGLE_MOTOR);
+	SpeedController* angle_motor;
 
 	void initialize()
 	{
-
+		angle_motor = Utils::constructMotor(MotorPorts::INTAKE_ANGLE_MOTOR);
 	}
 
 	void process()

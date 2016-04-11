@@ -5,16 +5,19 @@
 
 namespace Mobility
 {
-	SpeedController* left_motor1 = Utils::constructMotor(MotorPorts::LEFT_MOTOR1);
-	SpeedController* left_motor2 = Utils::constructMotor(MotorPorts::LEFT_MOTOR2);
-	SpeedController* right_motor1 = Utils::constructMotor(MotorPorts::RIGHT_MOTOR1);
-	SpeedController* right_motor2 = Utils::constructMotor(MotorPorts::RIGHT_MOTOR2);
+	SpeedController* left_motor1;
+	SpeedController* left_motor2;
+	SpeedController* right_motor1;
+	SpeedController* right_motor2;
 
 	bool normal_orientation = true;
 
 	void initialize()
 	{
-
+		left_motor1 = Utils::constructMotor(MotorPorts::LEFT_MOTOR1);
+		left_motor2 = Utils::constructMotor(MotorPorts::LEFT_MOTOR2);
+		right_motor1 = Utils::constructMotor(MotorPorts::RIGHT_MOTOR1);
+		right_motor2 = Utils::constructMotor(MotorPorts::RIGHT_MOTOR2);
 	}
 
 	void process()

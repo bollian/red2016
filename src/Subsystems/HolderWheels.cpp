@@ -5,12 +5,12 @@
 
 namespace HolderWheels
 {
-	SpeedController* wheels_motor = Utils::constructMotor(MotorPorts::HOLDER_WHEELS_MOTOR);
+	SpeedController* wheels_motor;
 	const float MOTOR_SPEED = 1.0;
 
 	void initialize()
 	{
-
+		wheels_motor = Utils::constructMotor(MotorPorts::HOLDER_WHEELS_MOTOR);
 	}
 
 	void process()

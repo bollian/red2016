@@ -7,11 +7,11 @@ namespace IntakeRoller
 {
 	const float MOTOR_SPEED = 1.0;
 
-	SpeedController* roller_motor = Utils::constructMotor(MotorPorts::INTAKE_ROLLER_MOTOR);
+	SpeedController* roller_motor;
 
 	void initialize()
 	{
-
+		roller_motor = Utils::constructMotor(MotorPorts::INTAKE_ROLLER_MOTOR);
 	}
 
 	void process()

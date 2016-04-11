@@ -5,11 +5,11 @@
 
 namespace ShooterWheels
 {
-	SpeedController* wheels_motor = Utils::constructMotor(MotorPorts::SHOOTER_WHEELS_MOTOR);
+	SpeedController* wheels_motor;
 
 	void initialize()
 	{
-
+		wheels_motor = Utils::constructMotor(MotorPorts::SHOOTER_WHEELS_MOTOR);
 	}
 
 	void process()

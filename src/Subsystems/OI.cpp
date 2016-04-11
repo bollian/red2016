@@ -5,12 +5,13 @@
 
 namespace OI
 {
-	Joystick* left_joy = new Joystick(OIPorts::LEFT_JOYSTICK);
-	Joystick* right_joy = new Joystick(OIPorts::RIGHT_JOYSTICK);
+	Joystick* left_joy;
+	Joystick* right_joy;
 
 	void initialize()
 	{
-
+		right_joy = new Joystick(OIPorts::RIGHT_JOYSTICK);
+		left_joy = new Joystick(OIPorts::LEFT_JOYSTICK);
 	}
 
 	void process()
