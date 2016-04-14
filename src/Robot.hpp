@@ -1,6 +1,7 @@
 #ifndef SRC_ROBOT_H_
 #define SRC_ROBOT_H_
 
+#include <PID/IntakeAngle.hpp>
 #include <PID/ShooterPitch.hpp>
 #include <PID/ShooterWheels.hpp>
 #include <WPILib.h>
@@ -19,6 +20,7 @@ public:
 private:
 	void processPID();
 	
+	IntakeAnglePID* intake_angle_pid;
 	ShooterPitchPID* shooter_pitch_pid;
 	ShooterWheelsPID* shooter_wheels_pid;
 	

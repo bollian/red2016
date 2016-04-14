@@ -18,6 +18,9 @@ float ShooterWheelsPID::returnPIDInput()
 
 float ShooterWheelsPID::getFeedForwardOutput(float new_target)
 {
+	if (new_target != getTarget()) {
+		clearAccumulatedError();
+	}
 	return F_COEFFICIENT * (new_target / 5000.0);
 }
 

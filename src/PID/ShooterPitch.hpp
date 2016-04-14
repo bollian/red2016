@@ -10,6 +10,7 @@ public:
 	
 protected:
 	float returnPIDInput();
+	float getFeedForwardOutput(float target);
 	void usePIDOutput(float output, float feed_forward);
 	
 private:

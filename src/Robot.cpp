@@ -14,6 +14,7 @@
 
 Robot::Robot()
 {
+	intake_angle_pid = IntakeAnglePID::getInstance();
 	shooter_pitch_pid = ShooterPitchPID::getInstance();
 	shooter_wheels_pid = ShooterWheelsPID::getInstance();
 }
@@ -104,6 +105,7 @@ void Robot::Test()
 
 void Robot::processPID()
 {
+	intake_angle_pid->process();
 	shooter_pitch_pid->process();
 	shooter_wheels_pid->process();
 }

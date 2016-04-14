@@ -14,6 +14,14 @@ float ShooterPitchPID::returnPIDInput()
 	return Sensors::getShooterAngle();
 }
 
+float ShooterPitchPID::getFeedForwardOutput(float target)
+{
+	if (target != getTarget()) {
+		clearAccumulatedError();
+	}
+	return 0.0;
+}
+
 void ShooterPitchPID::usePIDOutput(float output, float feed_forward)
 {
 	ShooterPitch::setSpeed(output);
