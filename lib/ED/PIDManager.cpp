@@ -37,11 +37,13 @@ namespace ED
 		
 		if (isEnabled()) {
 			
+			typedef duration<float> float_seconds;
+			float cycle_time = duration_cast<float_seconds>(last_timestamp - timestamp).count();
+				
 			bool in_i_zone = fabs(error) < i_zone && i_zone != 0.0;
 			if (in_i_zone) {
-				typedef duration<float> float_seconds;
 				// use average error for trapezoidal sum
-				accumulated_error += duration_cast<float_seconds>(last_timestamp - timestamp).count() * (error + last_error) / 2.0;
+				accumulated_error += cycle_time * (error + last_error) / 2.0;
 				
 				if (min_accumulated_error < max_accumulated_error) {
 					accumulated_error = accumulated_error > max_accumulated_error ? max_accumulated_error : accumulated_error;
@@ -50,7 +52,7 @@ namespace ED
 			}
 			
 			
-			float pid = p * error + d * (input - last_input);
+			float pid = p * error + d * (input - last_input) / cycle_time;
 			pid = in_i_zone ? pid : pid + i * accumulated_error;
 			
 			usePIDOutput(pid, feed_forward_output);
