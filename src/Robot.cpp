@@ -15,6 +15,7 @@
 Robot::Robot()
 {
 	shooter_pitch_pid = ShooterPitchPID::getInstance();
+	shooter_wheels_pid = ShooterWheelsPID::getInstance();
 }
 
 void Robot::RobotInit()
@@ -104,6 +105,7 @@ void Robot::Test()
 void Robot::processPID()
 {
 	shooter_pitch_pid->process();
+	shooter_wheels_pid->process();
 }
 
 START_ROBOT_CLASS(Robot)
