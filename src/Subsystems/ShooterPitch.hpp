@@ -12,8 +12,12 @@ namespace ShooterPitch
 
 	void setSpeed(float speed);
 	void setDirection(Utils::VerticalDirection dir);
+	
 	float getSpeed();
 	Utils::VerticalDirection getDirection();
+	
+	int getPresetCount();
+	float getAnglePreset(int index);
 }
 
 #endif /* SRC_SHOOTERPITCH_H_ */

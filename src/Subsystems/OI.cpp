@@ -6,6 +6,7 @@
 #include <Subsystems/Mobility.hpp>
 #include <Subsystems/OI.hpp>
 #include <Subsystems/Sensors.hpp>
+#include <Subsystems/ShooterPitch.hpp>
 #include <Subsystems/ShooterWheels.hpp>
 #include <Subsystems/Winches.hpp>
 #include <Utils.hpp>
@@ -20,8 +21,9 @@ namespace OI
 	Joystick* buttons_joy2;
 	
 	bool last_pid_switch = false;
-	bool last_shooter_switch = false;
-	int last_shooter_dial = -1;
+	bool last_shooter_wheels_switch = false;
+	int last_shooter_wheels_dial = -1;
+	int last_shooter_pitch_dial = -1;
 	
 	ShooterPitchPID* shooter_pitch_pid = ShooterPitchPID::getInstance();
 	ShooterWheelsPID* shooter_wheels_pid = ShooterWheelsPID::getInstance();
@@ -83,7 +85,7 @@ namespace OI
 		bool shooter_switch = buttons_joy1->GetRawButton(OIPorts::SHOOTER_WHEELS_SWITCH);
 		if (shooter_switch) {
 			int shooter_dial = Utils::convertVoltage(getJoystickAnalogPort(buttons_joy1, OIPorts::SHOOTER_SPEED_DIAL), ShooterWheels::getPresetCount(), 5.0);
-			if (shooter_dial != last_shooter_dial) {
+			if (shooter_dial != last_shooter_wheels_dial) {
 				if (shooter_wheels_pid->isEnabled()) {
 					shooter_wheels_pid->setTarget(ShooterWheels::getRPMPreset(shooter_dial));
 				}
@@ -92,11 +94,24 @@ namespace OI
 				}
 			}
 		}
-		else if (last_shooter_switch) { // if the switch was just turned off
+		else if (last_shooter_wheels_switch) { // if the switch was just turned off
 			ShooterWheels::setSpeed(0.0);
-			last_shooter_dial = -1; // forces a shooter update when the dial is turned back on
+			last_shooter_wheels_dial = -1; // forces a shooter update when the switch is turned back on
 		}
-		last_shooter_switch = shooter_switch;
+		last_shooter_wheels_switch = shooter_switch;
+		
+		////// Shooter pitch dial //////
+		int pitch_dial = Utils::convertVoltage(getJoystickAnalogPort(buttons_joy1, OIPorts::SHOOTER_PITCH_DIAL), ShooterPitch::getPresetCount(), 5.0);
+		if (pitch_dial != last_shooter_pitch_dial) { // if the dial has been moved
+			if (shooter_pitch_pid->isEnabled()) {
+				shooter_pitch_pid->setTarget(ShooterPitch::getAnglePreset(pitch_dial));
+			}
+			else {
+				// TODO: implement non-pid shooter pitch controls
+			}
+			
+			last_shooter_pitch_dial = pitch_dial;
+		}
 	}
 	
 	bool isPIDEnabled()

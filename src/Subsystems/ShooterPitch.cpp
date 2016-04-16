@@ -8,6 +8,15 @@ namespace ShooterPitch
 {
 	const float SHOOTER_TO_TARGET_HEIGHT = 45.72; // cm
 	const float MOTOR_SPEED = 1.0;
+	
+	const float ANGLE_PRESETS[] = {
+		0.0,
+		15.0,
+		30.0,
+		45.0,
+		60.0,
+		75.0
+	};
 
 	SpeedController* pitch_motor;
 
@@ -44,5 +53,23 @@ namespace ShooterPitch
 	Utils::VerticalDirection getDirection()
 	{
 		return (Utils::VerticalDirection)Utils::getDirection(&getSpeed);
+	}
+	
+	int getPresetCount()
+	{
+		return sizeof(ANGLE_PRESETS) / sizeof(*ANGLE_PRESETS);
+	}
+	
+	float getAnglePreset(int index)
+	{
+		int count = getPresetCount();
+		if (index > count) {
+			return ANGLE_PRESETS[count - 1];
+		}
+		if (index < 0) {
+			return ANGLE_PRESETS[0];
+		}
+		
+		return ANGLE_PRESETS[index];
 	}
 }

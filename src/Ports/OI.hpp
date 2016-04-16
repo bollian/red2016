@@ -10,8 +10,8 @@ namespace OIPorts
 	const unsigned int BUTTONS_JOYSTICK2 = 3;
 
 	// drive joystick ports
-	const unsigned int JOYSTICK_Y_PORT = 0;
-	const unsigned int JOYSTICK_X_PORT = 1;
+	const unsigned int JOYSTICK_X_PORT = 0;
+	const unsigned int JOYSTICK_Y_PORT = 1;
 	const unsigned int JOYSTICK_Z_PORT = 2;
 	
 	const unsigned int B_DRIVE_ALIGN_BUTTON_LEFT = 1;
@@ -32,9 +32,9 @@ namespace OIPorts
 	const unsigned int SHOOTER_WHEELS_SWITCH = 9;
 
 	// buttons joystick 1, analog
-	const unsigned int MANUAL_AIM_DIAL = 0; // X
-	const unsigned int SHOOTER_SPEED_DIAL = 1; // Y
-	const unsigned int INTAKE_ANGLE_DIAL = 2; // Z
+	const unsigned int SHOOTER_PITCH_DIAL = JOYSTICK_X_PORT; // X
+	const unsigned int SHOOTER_SPEED_DIAL = JOYSTICK_Y_PORT; // Y
+	const unsigned int INTAKE_ANGLE_DIAL = JOYSTICK_Z_PORT; // Z
 
 	// buttons joystick 2, digital
 	const unsigned int EXTEND_SCALING_ARM_BUTTON = 1;
@@ -44,8 +44,8 @@ namespace OIPorts
 	const unsigned int MANUAL_WINCH_ENABLE_SWITCH = 5;
 
 	// buttons joystick 2, analog
-	const unsigned int FRONT_WINCH_JOYSTICK = 0; // X
-	const unsigned int BACK_WINCH_JOYSTICK = 1; // Y
+	const unsigned int FRONT_WINCH_JOYSTICK = JOYSTICK_X_PORT; // X
+	const unsigned int BACK_WINCH_JOYSTICK = JOYSTICK_Y_PORT; // Y
 }
 
 #endif /* SRC_PORTS_OI_H_ */
