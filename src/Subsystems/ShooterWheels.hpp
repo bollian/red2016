@@ -8,6 +8,10 @@ namespace ShooterWheels
 
 	void setSpeed(float speed);
 	float getSpeed();
+	
+	int getPresetCount();
+	float getSpeedPreset(int index);
+	float getRPMPreset(int index);
 }
 
 #endif /* SRC_SHOOTERWHEELS_H_ */

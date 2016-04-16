@@ -38,6 +38,16 @@ namespace Sensors
 	bool isBallLimitEnabled();
 	bool isShooterLimitEnabled();
 	bool isPDPEnabled();
+	
+	void enableGyro(bool enable);
+	void enableShooterAngle(bool enable);
+	void enableIntakeAngle(bool enable);
+	void enableShooterTach(bool enable);
+	void enableLidar(bool enable);
+	void enableDriveEncoders(bool enable);
+	void enableBallLimit(bool enable);
+	void enableShooterLimit(bool enable);
+	void enablePDP(bool enable);
 }
 
 #endif /* SRC_SUBSYSTEMS_SENSORS_H_ */

@@ -10,6 +10,10 @@ namespace OIPorts
 	const unsigned int BUTTONS_JOYSTICK2 = 3;
 
 	// drive joystick ports
+	const unsigned int JOYSTICK_Y_PORT = 0;
+	const unsigned int JOYSTICK_X_PORT = 1;
+	const unsigned int JOYSTICK_Z_PORT = 2;
+	
 	const unsigned int B_DRIVE_ALIGN_BUTTON_LEFT = 1;
 	const unsigned int B_DRVIE_ALIGN_BUTTON_RIGHT = 1;
 
@@ -21,10 +25,10 @@ namespace OIPorts
 	const unsigned int SHOOT_BUTTON = 2;
 	const unsigned int MOVE_INTAKE_UP_BUTTON = 3;
 	const unsigned int MOVE_INTAKE_DOWN_BUTTON = 4;
-	const unsigned int PID_TOGGLE_SWITCH = 5;
+	const unsigned int PID_ENABLE_SWITCH = 5;
 	const unsigned int INTAKE_BELT_FORWARD_SWITCH = 6;
 	const unsigned int INTAKE_BELT_BACKWARD_SWITCH = 7;
-	const unsigned int SENSOR_OVERRIDE_SWITCH = 8;
+	const unsigned int SENSOR_ENABLE_SWITCH = 8;
 	const unsigned int SHOOTER_WHEELS_SWITCH = 9;
 
 	// buttons joystick 1, analog

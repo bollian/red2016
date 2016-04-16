@@ -5,9 +5,8 @@ namespace OI
 {
 	void initialize();
 	void process();
-
-	float getLeftJoystickY();
-	float getRightJoystickY();
+	
+	bool isPIDEnabled();
 }
 
 #endif /* SRC_OI_H_ */

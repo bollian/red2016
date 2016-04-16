@@ -27,6 +27,27 @@ namespace Sensors
 
 	const float DRIVE_WHEEL_DIAMETER = 7.9502;
 	const int DRIVE_ENCODER_PPR = 128;
+	
+	
+	const bool GYRO_ENABLED = true;
+	const bool SHOOTER_ANGLE_ENABLED = true;
+	const bool INTAKE_ANGLE_ENABLED = true;
+	const bool SHOOTER_TACH_ENABLED = true;
+	const bool LIDAR_ENABLED = true;
+	const bool DRIVE_ENCODERS_ENABLED = false;
+	const bool BALL_LIMIT_ENABLED = true;
+	const bool SHOOTER_LIMIT_ENABLED = true;
+	const bool PDP_ENABLED = true;
+	
+	bool gyro_soft_enabled = GYRO_ENABLED;
+	bool shooter_angle_soft_enabled = SHOOTER_ANGLE_ENABLED;
+	bool intake_angle_soft_enabled = INTAKE_ANGLE_ENABLED;
+	bool shooter_tach_soft_enabled = SHOOTER_TACH_ENABLED;
+	bool lidar_soft_enabled = LIDAR_ENABLED;
+	bool drive_encoders_soft_enabled = DRIVE_ENCODERS_ENABLED;
+	bool ball_limit_soft_enabled = BALL_LIMIT_ENABLED;
+	bool shooter_limit_soft_enabled = SHOOTER_LIMIT_ENABLED;
+	bool pdp_soft_enabled = PDP_ENABLED;
 
 	float getShooterAngleActual();
 
@@ -287,46 +308,91 @@ namespace Sensors
 
 	bool isGyroEnabled()
 	{
-		return true;
+		return GYRO_ENABLED && gyro_soft_enabled;
 	}
 
 	bool isShooterAngleEnabled()
 	{
-		return true;
+		return SHOOTER_ANGLE_ENABLED && shooter_angle_soft_enabled;
 	}
 
 	bool isIntakeAngleEnabled()
 	{
-		return true;
+		return INTAKE_ANGLE_ENABLED && intake_angle_soft_enabled;
 	}
 
 	bool isShooterTachEnabled()
 	{
-		return true;
+		return SHOOTER_TACH_ENABLED && shooter_tach_soft_enabled;
 	}
 
 	bool isLidarEnabled()
 	{
-		return true;
+		return LIDAR_ENABLED && lidar_soft_enabled;
 	}
 
 	bool areDriveEncodersEnabled()
 	{
-		return false;
+		return DRIVE_ENCODERS_ENABLED && drive_encoders_soft_enabled;
 	}
 
 	bool isBallLimitEnabled()
 	{
-		return true;
+		return BALL_LIMIT_ENABLED && ball_limit_soft_enabled;
 	}
 
 	bool isShooterLimitEnabled()
 	{
-		return true;
+		return SHOOTER_LIMIT_ENABLED && shooter_limit_soft_enabled;
 	}
 
 	bool isPDPEnabled()
 	{
-		return true;
+		return PDP_ENABLED && pdp_soft_enabled;
+	}
+	
+	void enableGyro(bool enable)
+	{
+		gyro_soft_enabled = enable;
+	}
+	
+	void enableShooterAngle(bool enable)
+	{
+		shooter_angle_soft_enabled = enable;
+	}
+	
+	void enableIntakeAngle(bool enable)
+	{
+		intake_angle_soft_enabled = enable;
+	}
+	
+	void enableShooterTach(bool enable)
+	{
+		shooter_tach_soft_enabled = enable;
+	}
+	
+	void enableLidar(bool enable)
+	{
+		lidar_soft_enabled = enable;
+	}
+	
+	void enableDriveEncoders(bool enable)
+	{
+		drive_encoders_soft_enabled = enable;
+	}
+	
+	void enableBallLimit(bool enable)
+	{
+		ball_limit_soft_enabled = enable;
+	}
+	
+	void enableShooterLimit(bool enable)
+	{
+		shooter_limit_soft_enabled = enable;
+	}
+	
+	void enablePDP(bool enable)
+	{
+		pdp_soft_enabled = enable;
 	}
 }
