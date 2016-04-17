@@ -86,7 +86,7 @@ namespace OI
 		////// Shooter speed dial //////
 		bool shooter_switch = buttons_joy1->GetRawButton(OIPorts::SHOOTER_WHEELS_SWITCH);
 		if (shooter_switch) {
-			int shooter_dial = Utils::convertVoltage(getJoystickAnalogPort(buttons_joy1, OIPorts::SHOOTER_SPEED_DIAL), ShooterWheels::getPresetCount(), 5.0);
+			int shooter_dial = Utils::convertVoltage(getJoystickAnalogPort(buttons_joy1, OIPorts::SHOOTER_SPEED_DIAL) + 1.0, ShooterWheels::getPresetCount(), 2.0);
 			if (shooter_dial != last_shooter_wheels_dial) {
 				if (shooter_wheels_pid->isEnabled()) {
 					shooter_wheels_pid->setTarget(ShooterWheels::getRPMPreset(shooter_dial));
@@ -103,7 +103,7 @@ namespace OI
 		last_shooter_wheels_switch = shooter_switch;
 		
 		////// Shooter pitch dial //////
-		int pitch_dial = Utils::convertVoltage(getJoystickAnalogPort(buttons_joy1, OIPorts::SHOOTER_PITCH_DIAL), ShooterPitch::getPresetCount(), 5.0);
+		int pitch_dial = Utils::convertVoltage(getJoystickAnalogPort(buttons_joy1, OIPorts::SHOOTER_PITCH_DIAL) + 1.0, ShooterPitch::getPresetCount(), 2.0);
 		if (pitch_dial != last_shooter_pitch_dial) { // if the dial has been moved
 			if (shooter_pitch_pid->isEnabled()) {
 				shooter_pitch_pid->setTarget(ShooterPitch::getAnglePreset(pitch_dial));
