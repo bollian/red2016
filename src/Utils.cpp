@@ -56,26 +56,15 @@ namespace Utils
 		return (int) (output + 0.5); // round the value
 	}
 
-
-	float boundaryCheck(float target, float min, float max)
+	bool valueInRange(float value, float min, float max)
 	{
-		if(target > max)
-		{
-			return max;
+		if (max < min) {
+			float tmp = min;
+			min = max;
+			max = tmp;
 		}
-		if (target < min)
-		{
-			return min;
-		}
-		return target;
-	}
-	float deadZoneCheck(float axis, float offset)
-	{
-		if (axis > offset || axis < offset)
-		{
-			return axis;
-		}
-		return 0.0;
+		
+		return value > min && value < max;
 	}
 
 	float wrap(float value, float min, float max)

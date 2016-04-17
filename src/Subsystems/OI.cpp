@@ -14,6 +14,8 @@
 
 namespace OI
 {
+	const float JOYSTICK_DEADZONE = 0.1;
+	
 	Joystick* left_joy;
 	Joystick* right_joy;
 	
@@ -28,7 +30,7 @@ namespace OI
 	ShooterPitchPID* shooter_pitch_pid = ShooterPitchPID::getInstance();
 	ShooterWheelsPID* shooter_wheels_pid = ShooterWheelsPID::getInstance();
 
-	float getJoystickAnalogPort(Joystick* joy, unsigned int port);
+	float getJoystickAnalogPort(Joystick* joy, unsigned int port, float deadzone = 0.0);
 
 	void initialize()
 	{
@@ -41,8 +43,8 @@ namespace OI
 	
 	void process()
 	{
-		Mobility::setLeftSpeed(getJoystickAnalogPort(left_joy, OIPorts::JOYSTICK_Y_PORT));
-		Mobility::setRightSpeed(getJoystickAnalogPort(right_joy, OIPorts::JOYSTICK_Y_PORT));
+		Mobility::setLeftSpeed(getJoystickAnalogPort(left_joy, OIPorts::JOYSTICK_Y_PORT, JOYSTICK_DEADZONE));
+		Mobility::setRightSpeed(getJoystickAnalogPort(right_joy, OIPorts::JOYSTICK_Y_PORT, JOYSTICK_DEADZONE));
 		
 		bool sensor_switch = buttons_joy1->GetRawButton(OIPorts::SENSOR_ENABLE_SWITCH);
 		Sensors::enableGyro(sensor_switch);
@@ -74,8 +76,8 @@ namespace OI
 		////// Winches & Climber Arm //////
 		bool winch_switch = buttons_joy2->GetRawButton(OIPorts::MANUAL_WINCH_ENABLE_SWITCH);
 		if (winch_switch) {
-			Winches::setFrontSpeed(getJoystickAnalogPort(buttons_joy2, OIPorts::FRONT_WINCH_JOYSTICK));
-			Winches::setFrontSpeed(getJoystickAnalogPort(buttons_joy2, OIPorts::BACK_WINCH_JOYSTICK));
+			Winches::setFrontSpeed(getJoystickAnalogPort(buttons_joy2, OIPorts::FRONT_WINCH_JOYSTICK, JOYSTICK_DEADZONE));
+			Winches::setFrontSpeed(getJoystickAnalogPort(buttons_joy2, OIPorts::BACK_WINCH_JOYSTICK, JOYSTICK_DEADZONE));
 		}
 		else {
 			ClimberArm::setSpeed(getJoystickAnalogPort(buttons_joy2, OIPorts::FRONT_WINCH_JOYSTICK));
@@ -119,8 +121,14 @@ namespace OI
 		return buttons_joy1->GetRawButton(OIPorts::PID_ENABLE_SWITCH);
 	}
 	
-	float getJoystickAnalogPort(Joystick* joy, unsigned int port)
+	float getJoystickAnalogPort(Joystick* joy, unsigned int port, float deadzone)
 	{
+		float joy_value = -joy->GetRawAxis(port);
+		
+		if (deadzone != 0.0 && Utils::valueInRange(joy_value, -deadzone, deadzone)) {
+			return 0.0;
+		}
+		
 		return -joy->GetRawAxis(port);
 	}
 }

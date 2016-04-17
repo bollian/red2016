@@ -30,8 +30,14 @@ namespace Utils
 	SpeedController* constructMotor(unsigned int port);
 
 	int convertVoltage(float voltage, int voltage_levels, float max_voltage);
-	float boundaryCheck(float target, float min, float max);
-	float deadZoneCheck(float axis, float offset);
+	/**
+	 * checks to see if a value is in an exclusive range
+	 * @param  value the value to check
+	 * @param  min   minimum required value
+	 * @param  max   maxiumu required value
+	 * @return       true if value is in the range (min, max) or (max, min) if max is less than min
+	 */
+	bool valueInRange(float value, float min, float max);
 	float wrap(float value, float min, float max);
 }
 
