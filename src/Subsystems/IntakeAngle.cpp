@@ -6,6 +6,15 @@
 namespace IntakeAngle
 {
 	const float MOTOR_SPEED = 0.5;
+	
+	const float ANGLE_PRESETS[] = {
+		-30.0,
+		-15.0,
+		3.0,
+		30.0,
+		60.0,
+		90.0
+	};
 
 	SpeedController* angle_motor;
 
@@ -37,5 +46,22 @@ namespace IntakeAngle
 	Utils::VerticalDirection getDirection()
 	{
 		return (Utils::VerticalDirection)Utils::getDirection(&getSpeed);
+	}
+	
+	int getPresetCount()
+	{
+		return sizeof(ANGLE_PRESETS) / sizeof(*ANGLE_PRESETS);
+	}
+	
+	float getAnglePreset(int index)
+	{
+		int count = getPresetCount();
+		if (index >= count) {
+			return ANGLE_PRESETS[count - 1];
+		}
+		if (index < 0) {
+			return ANGLE_PRESETS[0];
+		}
+		return ANGLE_PRESETS[index];
 	}
 }

@@ -13,6 +13,9 @@ namespace IntakeAngle
 
 	float getSpeed();
 	Utils::VerticalDirection getDirection();
+	
+	int getPresetCount();
+	float getAnglePreset(int index);
 }
 
 #endif /* SRC_SUBSYSTEMS_INTAKEANGLE_H_ */

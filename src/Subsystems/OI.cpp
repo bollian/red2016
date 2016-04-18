@@ -3,6 +3,7 @@
 #include <PID/ShooterWheels.hpp>
 #include <Ports/OI.hpp>
 #include <Subsystems/ClimberArm.hpp>
+#include <Subsystems/IntakeAngle.hpp>
 #include <Subsystems/Mobility.hpp>
 #include <Subsystems/OI.hpp>
 #include <Subsystems/Sensors.hpp>
@@ -24,9 +25,12 @@ namespace OI
 	
 	bool last_pid_switch = false;
 	bool last_shooter_wheels_switch = false;
-	int last_shooter_wheels_dial = -1;
+	int last_intake_angle_dial = -1;
 	int last_shooter_pitch_dial = -1;
+	int last_shooter_wheels_dial = -1;
+	Utils::VerticalDirection last_intake_angle_dir = Utils::VerticalDirection::V_STILL;
 	
+	IntakeAnglePID* intake_angle_pid = IntakeAnglePID::getInstance();
 	ShooterPitchPID* shooter_pitch_pid = ShooterPitchPID::getInstance();
 	ShooterWheelsPID* shooter_wheels_pid = ShooterWheelsPID::getInstance();
 
@@ -84,16 +88,19 @@ namespace OI
 		}
 		
 		////// Shooter speed dial //////
+		int dial;
 		bool shooter_switch = buttons_joy1->GetRawButton(OIPorts::SHOOTER_WHEELS_SWITCH);
 		if (shooter_switch) {
-			int shooter_dial = Utils::convertVoltage(getJoystickAnalogPort(buttons_joy1, OIPorts::SHOOTER_SPEED_DIAL) + 1.0, ShooterWheels::getPresetCount(), 2.0);
-			if (shooter_dial != last_shooter_wheels_dial) {
+			dial = Utils::convertVoltage(getJoystickAnalogPort(buttons_joy1, OIPorts::SHOOTER_SPEED_DIAL) + 1.0, ShooterWheels::getPresetCount(), 2.0);
+			if (dial != last_shooter_wheels_dial) {
 				if (shooter_wheels_pid->isEnabled()) {
-					shooter_wheels_pid->setTarget(ShooterWheels::getRPMPreset(shooter_dial));
+					shooter_wheels_pid->setTarget(ShooterWheels::getRPMPreset(dial));
 				}
 				else {
-					ShooterWheels::setSpeed(ShooterWheels::getSpeedPreset(shooter_dial));
+					ShooterWheels::setSpeed(ShooterWheels::getSpeedPreset(dial));
 				}
+				
+				last_shooter_wheels_dial = dial;
 			}
 		}
 		else if (last_shooter_wheels_switch) { // if the switch was just turned off
@@ -103,17 +110,61 @@ namespace OI
 		last_shooter_wheels_switch = shooter_switch;
 		
 		////// Shooter pitch dial //////
-		int pitch_dial = Utils::convertVoltage(getJoystickAnalogPort(buttons_joy1, OIPorts::SHOOTER_PITCH_DIAL) + 1.0, ShooterPitch::getPresetCount(), 2.0);
-		if (pitch_dial != last_shooter_pitch_dial) { // if the dial has been moved
+		dial = Utils::convertVoltage(getJoystickAnalogPort(buttons_joy1, OIPorts::SHOOTER_PITCH_DIAL) + 1.0, ShooterPitch::getPresetCount(), 2.0);
+		if (dial != last_shooter_pitch_dial) { // if the dial has been moved
 			if (shooter_pitch_pid->isEnabled()) {
-				shooter_pitch_pid->setTarget(ShooterPitch::getAnglePreset(pitch_dial));
+				shooter_pitch_pid->setTarget(ShooterPitch::getAnglePreset(dial));
 			}
 			else {
 				// TODO: implement non-pid shooter pitch controls
 			}
 			
-			last_shooter_pitch_dial = pitch_dial;
+			last_shooter_pitch_dial = dial;
 		}
+		
+		////// Intake angle manual controls //////
+		Utils::VerticalDirection intake_angle_dir = Utils::VerticalDirection::V_STILL;
+		if (buttons_joy1->GetRawButton(OIPorts::MOVE_INTAKE_UP_BUTTON)) {
+			intake_angle_dir = Utils::VerticalDirection::UP;
+		}
+		else if (buttons_joy1->GetRawButton(OIPorts::MOVE_INTAKE_DOWN_BUTTON)) {
+			intake_angle_dir = Utils::VerticalDirection::DOWN;
+		}
+		else {
+			intake_angle_dir = Utils::VerticalDirection::V_STILL;
+		}
+		
+		// always update the intake dial
+		dial = Utils::convertVoltage(getJoystickAnalogPort(buttons_joy1, OIPorts::INTAKE_ANGLE_DIAL) + 1.0, IntakeAngle::getPresetCount(), 2.0);
+		
+		switch (intake_angle_dir) {
+		case Utils::VerticalDirection::UP:
+		case Utils::VerticalDirection::DOWN:
+			IntakeAngle::setDirection(intake_angle_dir);
+			break;
+		case Utils::VerticalDirection::V_STILL:
+			////// Intake angle dial //////
+			if (dial != last_intake_angle_dial) {
+				if (intake_angle_pid->isEnabled()) {
+					intake_angle_pid->setTarget(IntakeAngle::getAnglePreset(dial));
+				}
+				else {
+					// TODO: implement non-pid intake angle control
+				}
+			}
+			else if (intake_angle_dir != last_intake_angle_dir) {
+				if (intake_angle_pid->isEnabled()) {
+					intake_angle_pid->setTarget(Sensors::getIntakeAngle());
+				}
+				else {
+					// TODO: implement non-pid intake angle control
+				}
+			}
+			break;
+		}
+		
+		last_intake_angle_dial = dial; // always update the intake dial, even while using manual controls
+		last_intake_angle_dir = intake_angle_dir;
 	}
 	
 	bool isPIDEnabled()
