@@ -5,6 +5,13 @@
 
 namespace IntakeAngle
 {
+	enum State {
+		DISABLED,
+		WAITING,
+		MANUAL_CONTROL,
+		REACHING_ANGLE
+	};
+	
 	void initialize();
 	void process();
 
@@ -13,6 +20,11 @@ namespace IntakeAngle
 
 	float getSpeed();
 	Utils::VerticalDirection getDirection();
+	
+	void engageManualControl();
+	void goToAngle(float degrees);
+	void interrupt();
+	State getState();
 	
 	int getPresetCount();
 	float getAnglePreset(int index);

@@ -140,24 +140,21 @@ namespace OI
 		switch (intake_angle_dir) {
 		case Utils::VerticalDirection::UP:
 		case Utils::VerticalDirection::DOWN:
+			IntakeAngle::engageManualControl();
 			IntakeAngle::setDirection(intake_angle_dir);
 			break;
+			
 		case Utils::VerticalDirection::V_STILL:
 			////// Intake angle dial //////
 			if (dial != last_intake_angle_dial) {
-				if (intake_angle_pid->isEnabled()) {
-					intake_angle_pid->setTarget(IntakeAngle::getAnglePreset(dial));
-				}
-				else {
-					// TODO: implement non-pid intake angle control
-				}
+				IntakeAngle::goToAngle(IntakeAngle::getAnglePreset(dial));
 			}
 			else if (intake_angle_dir != last_intake_angle_dir) {
-				if (intake_angle_pid->isEnabled()) {
-					intake_angle_pid->setTarget(Sensors::getIntakeAngle());
+				if (Sensors::isIntakeAngleEnabled()) {
+					IntakeAngle::goToAngle(Sensors::getIntakeAngle());
 				}
 				else {
-					// TODO: implement non-pid intake angle control
+					IntakeAngle::setDirection(Utils::VerticalDirection::V_STILL);
 				}
 			}
 			break;
