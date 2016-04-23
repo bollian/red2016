@@ -5,6 +5,13 @@
 
 namespace ShooterPitch
 {
+	enum State {
+		DISABLED,
+		WAITING,
+		MANUAL_CONTROL,
+		REACHING_ANGLE
+	};
+	
 	extern const float SHOOTER_TO_TARGET_HEIGHT;
 
 	void initialize();
@@ -15,6 +22,11 @@ namespace ShooterPitch
 	
 	float getSpeed();
 	Utils::VerticalDirection getDirection();
+	
+	void engageManualControl();
+	void goToAngle(float degrees);
+	void interrupt();
+	State getState();
 	
 	int getPresetCount();
 	float getAnglePreset(int index);

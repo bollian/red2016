@@ -38,6 +38,7 @@ namespace IntakeAngle
 		switch (state) {
 		case State::DISABLED:
 		case State::WAITING:
+			pid_manager->enable(false);
 			setSpeed(0.0);
 			break;
 			
@@ -46,7 +47,10 @@ namespace IntakeAngle
 			break;
 			
 		case State::REACHING_ANGLE:
-			if (!pid_manager->isEnabled()) {
+			if (pid_manager->isEnabled()) {
+				pid_manager->setTarget(target_angle); // in case pid is enabled while going to an angle
+			}
+			else {
 				float error = target_angle - Sensors::getIntakeAngle();
 				if (fabs(error) > ACCEPTABLE_ERROR) {
 					if (error > 0) {
@@ -67,7 +71,9 @@ namespace IntakeAngle
 
 	void setSpeed(float speed)
 	{
-		angle_motor->Set(speed);
+		if (state != State::DISABLED) {
+			angle_motor->Set(speed);
+		}
 	}
 
 	void setDirection(Utils::VerticalDirection dir)

@@ -112,12 +112,7 @@ namespace OI
 		////// Shooter pitch dial //////
 		dial = Utils::convertVoltage(getJoystickAnalogPort(buttons_joy1, OIPorts::SHOOTER_PITCH_DIAL) + 1.0, ShooterPitch::getPresetCount(), 2.0);
 		if (dial != last_shooter_pitch_dial) { // if the dial has been moved
-			if (shooter_pitch_pid->isEnabled()) {
-				shooter_pitch_pid->setTarget(ShooterPitch::getAnglePreset(dial));
-			}
-			else {
-				// TODO: implement non-pid shooter pitch controls
-			}
+			ShooterPitch::goToAngle(ShooterPitch::getAnglePreset(dial));
 			
 			last_shooter_pitch_dial = dial;
 		}
