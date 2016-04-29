@@ -36,7 +36,9 @@ void Robot::RobotInit()
 
 void Robot::Disabled()
 {
+	intake_angle_pid->enable(false);
 	shooter_pitch_pid->enable(false);
+	shooter_wheels_pid->enable(false);
 	
 	char message[1023];
 	while (!IsEnabled()) {
@@ -54,7 +56,9 @@ void Robot::Disabled()
 
 void Robot::Autonomous()
 {
+	intake_angle_pid->enable(true);
 	shooter_pitch_pid->enable(true);
+	shooter_wheels_pid->enable(true);
 	
 	while (IsEnabled() && IsAutonomous()) {
 		Cameras::process();
@@ -74,7 +78,10 @@ void Robot::Autonomous()
 
 void Robot::OperatorControl()
 {
-	shooter_pitch_pid->enable(true);
+	bool enable_pid = OI::isPIDEnabled();
+	intake_angle_pid->enable(enable_pid);
+	shooter_pitch_pid->enable(enable_pid);
+	shooter_wheels_pid->enable(enable_pid);
 	
 	while (IsEnabled() && IsOperatorControl()) {
 		Cameras::process();
