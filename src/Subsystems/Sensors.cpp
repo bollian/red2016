@@ -14,6 +14,9 @@
 
 namespace Sensors
 {
+	const float MIN_GYRO_ANGLE = -180.0;
+	const float MAX_GYRO_ANGLE = 180.0;
+	
 	const float MIN_SHOOTER_ENCODER_VOLT = 1.4;
 	const float MAX_SHOOTER_ENCODER_VOLT = 2.6;
 

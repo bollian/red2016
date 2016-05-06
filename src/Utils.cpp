@@ -1,3 +1,4 @@
+#include <math.h>
 #include <Utils.hpp>
 #include <WPILib.h>
 
@@ -66,6 +67,24 @@ namespace Utils
 		
 		return value > min && value < max;
 	}
+	
+	float boundsCheck(float value, float lower, float upper)
+	{
+		if (lower > upper) {
+			float tmp;
+			tmp = lower;
+			lower = upper;
+			upper = tmp;
+		}
+		
+		if (value > upper) {
+			return upper;
+		}
+		if (value < lower) {
+			return lower;
+		}
+		return value;
+	}
 
 	float wrap(float value, float min, float max)
 	{
@@ -77,6 +96,26 @@ namespace Utils
 		{
 			value += (min - max);
 		}
+		return value;
+	}
+	
+	float getRelative(float value, float center, float min, float max)
+	{
+		if (max < min) {
+			// if min is greater than max, values scale backwards
+			float tmp = min;
+			min = max;
+			max = tmp;
+			
+			value = max - value + min;
+			center = max - center + min;
+		}
+		
+		value = value - center;
+		if (fabs(value) > (max - min) / 2.0) {
+			value += value < 0.0 ? max - min : min - max;
+		}
+		
 		return value;
 	}
 }

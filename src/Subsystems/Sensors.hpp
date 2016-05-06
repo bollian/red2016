@@ -6,6 +6,8 @@ namespace Sensors
 	/*
 	 * All distances, unless otherwise noted, are in centimeters.
 	 */
+	extern const float MIN_GYRO_ANGLE;
+	extern const float MAX_GYRO_ANGLE;
 
 	void initialize();
 	void process();
