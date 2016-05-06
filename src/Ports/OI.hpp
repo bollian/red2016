@@ -14,8 +14,8 @@ namespace OIPorts
 	const unsigned int JOYSTICK_Y_PORT = 1;
 	const unsigned int JOYSTICK_Z_PORT = 2;
 	
-	const unsigned int B_DRIVE_ALIGN_BUTTON_LEFT = 1;
-	const unsigned int B_DRVIE_ALIGN_BUTTON_RIGHT = 1;
+	const unsigned int B_DRIVE_STRAIGHT_LEFT = 1;
+	const unsigned int B_DRIVE_STRAIGHT_RIGHT = 1;
 
 	const unsigned int B_TURN_X_AXIS_RIGHT = 2;
 	const unsigned int B_TURN_X_AXIS_LEFT = 2;

@@ -47,8 +47,19 @@ namespace OI
 	
 	void process()
 	{
-		Mobility::setLeftSpeed(getJoystickAnalogPort(left_joy, OIPorts::JOYSTICK_Y_PORT, JOYSTICK_DEADZONE));
-		Mobility::setRightSpeed(getJoystickAnalogPort(right_joy, OIPorts::JOYSTICK_Y_PORT, JOYSTICK_DEADZONE));
+		float left_joy_speed = getJoystickAnalogPort(left_joy, OIPorts::JOYSTICK_Y_PORT, JOYSTICK_DEADZONE);
+		float right_joy_speed = getJoystickAnalogPort(right_joy, OIPorts::JOYSTICK_X_PORT, JOYSTICK_DEADZONE);
+		if (left_joy->GetRawButton(OIPorts::B_DRIVE_STRAIGHT_LEFT)) {
+			Mobility::driveStraight(left_joy_speed);
+		}
+		else if (right_joy->GetRawButton(OIPorts::B_DRIVE_STRAIGHT_RIGHT)) {
+			Mobility::driveStraight(right_joy_speed);
+		}
+		else {
+			Mobility::engageManualControl();
+			Mobility::setLeftSpeed(left_joy_speed);
+			Mobility::setRightSpeed(right_joy_speed);
+		}
 		
 		bool sensor_switch = buttons_joy1->GetRawButton(OIPorts::SENSOR_ENABLE_SWITCH);
 		Sensors::enableGyro(sensor_switch);
