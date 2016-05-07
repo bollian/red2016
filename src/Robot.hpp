@@ -9,7 +9,6 @@
 class Robot : public SampleRobot
 {
 public:
-	Robot();
 	void RobotInit();
 	
 	void Disabled();

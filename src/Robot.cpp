@@ -12,13 +12,6 @@
 #include <Subsystems/Winches.hpp>
 #include <WPILib.h>
 
-Robot::Robot()
-{
-	intake_angle_pid = IntakeAnglePID::getInstance();
-	shooter_pitch_pid = ShooterPitchPID::getInstance();
-	shooter_wheels_pid = ShooterWheelsPID::getInstance();
-}
-
 void Robot::RobotInit()
 {
 	Cameras::initialize();
@@ -32,6 +25,10 @@ void Robot::RobotInit()
 	ShooterPitch::initialize();
 	ShooterWheels::initialize();
 	Winches::initialize();
+	
+	intake_angle_pid = IntakeAnglePID::getInstance();
+	shooter_pitch_pid = ShooterPitchPID::getInstance();
+	shooter_wheels_pid = ShooterWheelsPID::getInstance();
 }
 
 void Robot::Disabled()
