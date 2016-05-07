@@ -168,6 +168,8 @@ namespace Mobility
 				target_angle = Sensors::getRobotAngle();
 				break;
 			}
+			
+			state = new_state;
 		}
 	}
 }
