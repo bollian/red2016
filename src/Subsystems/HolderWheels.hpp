@@ -7,6 +7,18 @@ namespace HolderWheels
 {
 	void initialize();
 	void process();
+	
+	enum State {
+		DISABLED,
+		WAITING,
+		MANUAL_CONTROL,
+		SHOOTING_BALL
+	};
+	
+	void engageManualControl();
+	void shootBall();
+	void interrupt();
+	State getState();
 
 	void setDirection(Utils::HorizontalDirection dir);
 	Utils::HorizontalDirection getDirection();
