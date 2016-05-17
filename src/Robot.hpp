@@ -18,6 +18,7 @@ public:
 	
 private:
 	void processPID();
+	void interruptAll();
 	
 	IntakeAnglePID* intake_angle_pid;
 	ShooterPitchPID* shooter_pitch_pid;

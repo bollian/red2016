@@ -1,3 +1,4 @@
+#include <Coordination.hpp>
 #include <Robot.hpp>
 #include <Subsystems/Cameras.hpp>
 #include <Subsystems/ClimberArm.hpp>
@@ -26,6 +27,8 @@ void Robot::RobotInit()
 	ShooterWheels::initialize();
 	Winches::initialize();
 	
+	Coordination::initialize();
+	
 	intake_angle_pid = IntakeAnglePID::getInstance();
 	shooter_pitch_pid = ShooterPitchPID::getInstance();
 	shooter_wheels_pid = ShooterWheelsPID::getInstance();
@@ -36,6 +39,8 @@ void Robot::Disabled()
 	intake_angle_pid->enable(false);
 	shooter_pitch_pid->enable(false);
 	shooter_wheels_pid->enable(false);
+	
+	interruptAll();
 	
 	char message[1023];
 	while (!IsEnabled()) {
@@ -56,6 +61,8 @@ void Robot::Autonomous()
 	intake_angle_pid->enable(true);
 	shooter_pitch_pid->enable(true);
 	shooter_wheels_pid->enable(true);
+	
+	interruptAll();
 	
 	while (IsEnabled() && IsAutonomous()) {
 		Cameras::process();
@@ -79,6 +86,8 @@ void Robot::OperatorControl()
 	intake_angle_pid->enable(enable_pid);
 	shooter_pitch_pid->enable(enable_pid);
 	shooter_wheels_pid->enable(enable_pid);
+	
+	interruptAll();
 	
 	while (IsEnabled() && IsOperatorControl()) {
 		Cameras::process();
@@ -112,6 +121,17 @@ void Robot::processPID()
 	intake_angle_pid->process();
 	shooter_pitch_pid->process();
 	shooter_wheels_pid->process();
+}
+
+void Robot::interruptAll()
+{
+	Coordination::interrupt();
+	
+	HolderWheels::interrupt();
+	IntakeAngle::interrupt();
+	Mobility::interrupt();
+	ShooterPitch::interrupt();
+	ShooterWheels::interrupt();
 }
 
 START_ROBOT_CLASS(Robot)
