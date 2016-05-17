@@ -35,7 +35,13 @@ namespace OI
 	ShooterWheelsPID* shooter_wheels_pid = ShooterWheelsPID::getInstance();
 
 	float getJoystickAnalogPort(Joystick* joy, unsigned int port, float deadzone = 0.0);
-
+	
+	void mobilityProcess();
+	void intakeProcess(); // includes HolderWheels
+	void shooterPitchProcess();
+	void shooterWheelsProcess();
+	void climberProcess(); // includes arm and winches
+	
 	void initialize()
 	{
 		right_joy = new Joystick(OIPorts::RIGHT_JOYSTICK);
@@ -47,20 +53,6 @@ namespace OI
 	
 	void process()
 	{
-		float left_joy_speed = getJoystickAnalogPort(left_joy, OIPorts::JOYSTICK_Y_PORT, JOYSTICK_DEADZONE);
-		float right_joy_speed = getJoystickAnalogPort(right_joy, OIPorts::JOYSTICK_X_PORT, JOYSTICK_DEADZONE);
-		if (left_joy->GetRawButton(OIPorts::B_DRIVE_STRAIGHT_LEFT)) {
-			Mobility::driveStraight(left_joy_speed);
-		}
-		else if (right_joy->GetRawButton(OIPorts::B_DRIVE_STRAIGHT_RIGHT)) {
-			Mobility::driveStraight(right_joy_speed);
-		}
-		else {
-			Mobility::engageManualControl();
-			Mobility::setLeftSpeed(left_joy_speed);
-			Mobility::setRightSpeed(right_joy_speed);
-		}
-		
 		bool sensor_switch = buttons_joy1->GetRawButton(OIPorts::SENSOR_ENABLE_SWITCH);
 		Sensors::enableGyro(sensor_switch);
 		Sensors::enableShooterAngle(sensor_switch);
@@ -88,47 +80,50 @@ namespace OI
 			last_pid_switch = pid_switch;
 		}
 		
-		////// Winches & Climber Arm //////
-		bool winch_switch = buttons_joy2->GetRawButton(OIPorts::MANUAL_WINCH_ENABLE_SWITCH);
-		if (winch_switch) {
-			Winches::setFrontSpeed(getJoystickAnalogPort(buttons_joy2, OIPorts::FRONT_WINCH_JOYSTICK, JOYSTICK_DEADZONE));
-			Winches::setFrontSpeed(getJoystickAnalogPort(buttons_joy2, OIPorts::BACK_WINCH_JOYSTICK, JOYSTICK_DEADZONE));
+		mobilityProcess();
+		intakeProcess();
+		shooterPitchProcess();
+		shooterWheelsProcess();
+		climberProcess();
+	}
+	
+	bool isPIDEnabled()
+	{
+		return buttons_joy1->GetRawButton(OIPorts::PID_ENABLE_SWITCH);
+	}
+	
+	float getJoystickAnalogPort(Joystick* joy, unsigned int port, float deadzone)
+	{
+		float joy_value = -joy->GetRawAxis(port);
+		
+		if (deadzone != 0.0 && Utils::valueInRange(joy_value, -deadzone, deadzone)) {
+			return 0.0;
+		}
+		
+		return -joy->GetRawAxis(port);
+	}
+	
+	void mobilityProcess()
+	{
+		float left_joy_speed = getJoystickAnalogPort(left_joy, OIPorts::JOYSTICK_Y_PORT, JOYSTICK_DEADZONE);
+		float right_joy_speed = getJoystickAnalogPort(right_joy, OIPorts::JOYSTICK_X_PORT, JOYSTICK_DEADZONE);
+		if (left_joy->GetRawButton(OIPorts::B_DRIVE_STRAIGHT_LEFT)) {
+			Mobility::driveStraight(left_joy_speed);
+		}
+		else if (right_joy->GetRawButton(OIPorts::B_DRIVE_STRAIGHT_RIGHT)) {
+			Mobility::driveStraight(right_joy_speed);
 		}
 		else {
-			ClimberArm::setSpeed(getJoystickAnalogPort(buttons_joy2, OIPorts::FRONT_WINCH_JOYSTICK));
+			Mobility::engageManualControl();
+			Mobility::setLeftSpeed(left_joy_speed);
+			Mobility::setRightSpeed(right_joy_speed);
 		}
+	}
+	
+	void intakeProcess()
+	{
+		int dial = Utils::convertVoltage(getJoystickAnalogPort(buttons_joy1, OIPorts::INTAKE_ANGLE_DIAL) + 1.0, IntakeAngle::getPresetCount(), 2.0);
 		
-		////// Shooter speed dial //////
-		int dial;
-		bool shooter_switch = buttons_joy1->GetRawButton(OIPorts::SHOOTER_WHEELS_SWITCH);
-		if (shooter_switch) {
-			dial = Utils::convertVoltage(getJoystickAnalogPort(buttons_joy1, OIPorts::SHOOTER_SPEED_DIAL) + 1.0, ShooterWheels::getPresetCount(), 2.0);
-			if (dial != last_shooter_wheels_dial) {
-				if (shooter_wheels_pid->isEnabled()) {
-					ShooterWheels::setRate(ShooterWheels::getRPMPreset(dial));
-				}
-				else {
-					ShooterWheels::setSpeed(ShooterWheels::getSpeedPreset(dial));
-				}
-				
-				last_shooter_wheels_dial = dial;
-			}
-		}
-		else if (last_shooter_wheels_switch) { // if the switch was just turned off
-			ShooterWheels::setSpeed(0.0);
-			last_shooter_wheels_dial = -1; // forces a shooter update when the switch is turned back on
-		}
-		last_shooter_wheels_switch = shooter_switch;
-		
-		////// Shooter pitch dial //////
-		dial = Utils::convertVoltage(getJoystickAnalogPort(buttons_joy1, OIPorts::SHOOTER_PITCH_DIAL) + 1.0, ShooterPitch::getPresetCount(), 2.0);
-		if (dial != last_shooter_pitch_dial) { // if the dial has been moved
-			ShooterPitch::goToAngle(ShooterPitch::getAnglePreset(dial));
-			
-			last_shooter_pitch_dial = dial;
-		}
-		
-		////// Intake angle manual controls //////
 		Utils::VerticalDirection intake_angle_dir = Utils::VerticalDirection::V_STILL;
 		if (buttons_joy1->GetRawButton(OIPorts::MOVE_INTAKE_UP_BUTTON)) {
 			intake_angle_dir = Utils::VerticalDirection::UP;
@@ -139,9 +134,6 @@ namespace OI
 		else {
 			intake_angle_dir = Utils::VerticalDirection::V_STILL;
 		}
-		
-		// always update the intake dial
-		dial = Utils::convertVoltage(getJoystickAnalogPort(buttons_joy1, OIPorts::INTAKE_ANGLE_DIAL) + 1.0, IntakeAngle::getPresetCount(), 2.0);
 		
 		switch (intake_angle_dir) {
 		case Utils::VerticalDirection::UP:
@@ -166,23 +158,55 @@ namespace OI
 			break;
 		}
 		
-		last_intake_angle_dial = dial; // always update the intake dial, even while using manual controls
+		last_intake_angle_dial = dial; // prevent the dial from taking control after manual controls are over
 		last_intake_angle_dir = intake_angle_dir;
 	}
 	
-	bool isPIDEnabled()
+	void shooterPitchProcess()
 	{
-		return buttons_joy1->GetRawButton(OIPorts::PID_ENABLE_SWITCH);
+		////// Shooter pitch dial //////
+		int dial = Utils::convertVoltage(getJoystickAnalogPort(buttons_joy1, OIPorts::SHOOTER_PITCH_DIAL) + 1.0, ShooterPitch::getPresetCount(), 2.0);
+		if (dial != last_shooter_pitch_dial) { // if the dial has been moved
+			ShooterPitch::goToAngle(ShooterPitch::getAnglePreset(dial));
+			
+			last_shooter_pitch_dial = dial;
+		}
 	}
 	
-	float getJoystickAnalogPort(Joystick* joy, unsigned int port, float deadzone)
+	void shooterWheelsProcess()
 	{
-		float joy_value = -joy->GetRawAxis(port);
-		
-		if (deadzone != 0.0 && Utils::valueInRange(joy_value, -deadzone, deadzone)) {
-			return 0.0;
+		bool shooter_switch = buttons_joy1->GetRawButton(OIPorts::SHOOTER_WHEELS_SWITCH);
+		if (shooter_switch) {
+			int dial = Utils::convertVoltage(getJoystickAnalogPort(buttons_joy1, OIPorts::SHOOTER_SPEED_DIAL) + 1.0, ShooterWheels::getPresetCount(), 2.0);
+			if (dial != last_shooter_wheels_dial) {
+				if (shooter_wheels_pid->isEnabled()) {
+					ShooterWheels::setRate(ShooterWheels::getRPMPreset(dial));
+				}
+				else {
+					ShooterWheels::setSpeed(ShooterWheels::getSpeedPreset(dial));
+				}
+				
+				last_shooter_wheels_dial = dial;
+			}
 		}
-		
-		return -joy->GetRawAxis(port);
+		else if (last_shooter_wheels_switch) { // if the switch was just turned off
+			ShooterWheels::setSpeed(0.0);
+			last_shooter_wheels_dial = -1; // forces a shooter update when the switch is turned back on
+		}
+		last_shooter_wheels_switch = shooter_switch;
 	}
+	
+	void climberProcess()
+	{
+		////// Winches & Climber Arm //////
+		bool winch_switch = buttons_joy2->GetRawButton(OIPorts::MANUAL_WINCH_ENABLE_SWITCH);
+		if (winch_switch) {
+			Winches::setFrontSpeed(getJoystickAnalogPort(buttons_joy2, OIPorts::FRONT_WINCH_JOYSTICK, JOYSTICK_DEADZONE));
+			Winches::setFrontSpeed(getJoystickAnalogPort(buttons_joy2, OIPorts::BACK_WINCH_JOYSTICK, JOYSTICK_DEADZONE));
+		}
+		else {
+			ClimberArm::setSpeed(getJoystickAnalogPort(buttons_joy2, OIPorts::FRONT_WINCH_JOYSTICK));
+		}
+	}
+	
 }
