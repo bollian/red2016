@@ -6,6 +6,7 @@ namespace ShooterWheels
 	enum State {
 		DISABLED,
 		WAITING,
+		MANUAL_CONTROL,
 		MAINTAINING_RATE
 	};
 	
@@ -15,8 +16,10 @@ namespace ShooterWheels
 	void setSpeed(float speed);
 	void setRate(float rate);
 	float getSpeed();
+	bool atRate();
 	
 	void interrupt();
+	void engageManualControl();
 	State getState();
 	
 	int getPresetCount();

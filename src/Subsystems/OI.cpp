@@ -179,10 +179,11 @@ namespace OI
 		if (shooter_switch) {
 			int dial = Utils::convertVoltage(getJoystickAnalogPort(buttons_joy1, OIPorts::SHOOTER_SPEED_DIAL) + 1.0, ShooterWheels::getPresetCount(), 2.0);
 			if (dial != last_shooter_wheels_dial) {
-				if (shooter_wheels_pid->isEnabled()) {
+				if (Sensors::isShooterTachEnabled()) {
 					ShooterWheels::setRate(ShooterWheels::getRPMPreset(dial));
 				}
 				else {
+					ShooterWheels::engageManualControl();
 					ShooterWheels::setSpeed(ShooterWheels::getSpeedPreset(dial));
 				}
 				

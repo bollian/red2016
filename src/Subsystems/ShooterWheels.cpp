@@ -1,5 +1,8 @@
+#include <math.h>
 #include <Ports/Motor.hpp>
 #include <PID/ShooterWheels.hpp>
+#include <Subsystems/OI.hpp>
+#include <Subsystems/Sensors.hpp>
 #include <Subsystems/ShooterWheels.hpp>
 #include <Utils.hpp>
 #include <WPILib.h>
@@ -24,33 +27,68 @@ namespace ShooterWheels
 		1.0
 	};
 	
+	const float ACCEPTABLE_RATE_ERROR = 25.0;
+	
 	State state = State::WAITING;
 	
 	ShooterWheelsPID* pid_manager = ShooterWheelsPID::getInstance();
 	SpeedController* wheels_motor;
+	
+	Timer* target_timer;
+	int on_target_count = 0;
 	
 	void setState(State new_state);
 	
 	void initialize()
 	{
 		wheels_motor = Utils::constructMotor(MotorPorts::SHOOTER_WHEELS_MOTOR);
+		
+		target_timer = new Timer();
 	}
 
 	void process()
 	{
-
+		switch (state) {
+		case State::DISABLED:
+			break;
+		
+		case State::WAITING:
+			break;
+		
+		case State::MANUAL_CONTROL:
+			break;
+		
+		case State::MAINTAINING_RATE:
+			if (fabs(Sensors::getShooterWheelRate() - pid_manager->getTarget()) < ACCEPTABLE_RATE_ERROR) {
+				if (target_timer->HasPeriodPassed(0.2)) {
+					++on_target_count;
+				}
+			}
+			else {
+				on_target_count = 0;
+			}
+			break;
+		}
 	}
 
 	void setSpeed(float speed)
 	{
-		wheels_motor->Set(speed);
+		if (state != State::DISABLED) {
+			wheels_motor->Set(speed);
+		}
 	}
 	
 	void setRate(float rate)
 	{
-		pid_manager->enable(true);
-		pid_manager->setTarget(rate);
-		setState(State::MAINTAINING_RATE);
+		if (OI::isPIDEnabled()) {
+			pid_manager->enable(true);
+			pid_manager->setTarget(rate);
+			setState(State::MAINTAINING_RATE);
+		}
+		else {
+			setSpeed(rate / getRPMPreset(getPresetCount() - 1));
+			setState(State::MANUAL_CONTROL);
+		}
 	}
 	
 	float getSpeed()
@@ -87,9 +125,19 @@ namespace ShooterWheels
 		return RPM_PRESETS[index];
 	}
 	
+	bool atRate()
+	{
+		return on_target_count > 5 && state == State::MAINTAINING_RATE;
+	}
+	
 	void interrupt()
 	{
 		setState(State::WAITING);
+	}
+	
+	void engageManualControl()
+	{
+		setState(State::MANUAL_CONTROL);
 	}
 	
 	void setState(State new_state)
@@ -102,7 +150,9 @@ namespace ShooterWheels
 			case State::WAITING:
 				break;
 			
+			case State::MANUAL_CONTROL:
 			case State::MAINTAINING_RATE:
+				setSpeed(0.0);
 				break;
 			}
 			
@@ -112,10 +162,15 @@ namespace ShooterWheels
 				break;
 			
 			case State::WAITING:
-				setSpeed(0.0);
+				break;
+			
+			case State::MANUAL_CONTROL:
 				break;
 			
 			case State::MAINTAINING_RATE:
+				target_timer->Start();
+				target_timer->Reset();
+				on_target_count = 0;
 				break;
 			}
 			
