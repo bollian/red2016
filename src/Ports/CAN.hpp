@@ -3,7 +3,7 @@
 
 namespace CANPorts
 {
-	const unsigned int PDP = 0;
+	extern const unsigned int PDP;
 }
 
 #endif /* SRC_PORTS_CAN_H_ */

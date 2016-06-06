@@ -3,9 +3,9 @@
 
 namespace I2CPorts
 {
-	const unsigned int LIDAR_ADDRESS = 0x62;
-	const unsigned int LIDAR_INIT_REGISTER = 0x00;
-	const unsigned int LIDAR_RANGE_REGISTER = 0x8f;
+	extern const unsigned int LIDAR_ADDRESS;
+	extern const unsigned int LIDAR_INIT_REGISTER;
+	extern const unsigned int LIDAR_RANGE_REGISTER;
 }
 
 #endif /* SRC_PORTS_I2C_H_ */
