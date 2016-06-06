@@ -1,3 +1,4 @@
+#include <Coordination.hpp>
 #include <PID/IntakeAngle.hpp>
 #include <PID/ShooterPitch.hpp>
 #include <PID/ShooterWheels.hpp>
@@ -176,15 +177,26 @@ namespace OI
 	void shooterWheelsProcess()
 	{
 		bool shooter_switch = buttons_joy1->GetRawButton(OIPorts::SHOOTER_WHEELS_SWITCH);
+		
+		// the current position of the shooter dial
+		int dial = Utils::convertVoltage(getJoystickAnalogPort(buttons_joy1, OIPorts::SHOOTER_SPEED_DIAL) + 1.0, ShooterWheels::getPresetCount(), 2.0);
+		
+		float speed; // is used later for the shoot button as well; might refer to either `rate` or `speed`
+		if (Sensors::isShooterTachEnabled()) {
+			speed = ShooterWheels::getRPMPreset(dial);
+		}
+		else {
+			speed = ShooterWheels::getSpeedPreset(dial);
+		}
+		
 		if (shooter_switch) {
-			int dial = Utils::convertVoltage(getJoystickAnalogPort(buttons_joy1, OIPorts::SHOOTER_SPEED_DIAL) + 1.0, ShooterWheels::getPresetCount(), 2.0);
 			if (dial != last_shooter_wheels_dial) {
 				if (Sensors::isShooterTachEnabled()) {
-					ShooterWheels::setRate(ShooterWheels::getRPMPreset(dial));
+					ShooterWheels::setRate(speed);
 				}
 				else {
 					ShooterWheels::engageManualControl();
-					ShooterWheels::setSpeed(ShooterWheels::getSpeedPreset(dial));
+					ShooterWheels::setSpeed(speed);
 				}
 				
 				last_shooter_wheels_dial = dial;
@@ -195,6 +207,10 @@ namespace OI
 			last_shooter_wheels_dial = -1; // forces a shooter update when the switch is turned back on
 		}
 		last_shooter_wheels_switch = shooter_switch;
+		
+		if (buttons_joy1->GetRawButton(OIPorts::SHOOT_BUTTON)) {
+			Coordination::shootBall(speed);
+		}
 	}
 	
 	void climberProcess()

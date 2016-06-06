@@ -14,7 +14,7 @@ namespace Coordination
 	void initialize();
 	void process();
 	
-	void shootBall();
+	void shootBall(float speed);
 	void autoAim();
 	void autoShoot();
 	void interrupt();

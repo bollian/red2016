@@ -8,15 +8,20 @@
 namespace Coordination
 {
 	const float AUTONOMOUS_SHOOTER_WHEELS_RATE = ShooterWheels::getRPMPreset(ShooterWheels::getPresetCount() - 1);
+	const float SHOOT_SPEED_UP_TIME = 5.0;
+	const float PUSH_BOULDER_TIMER = 2.0;
 	
 	State state = State::WAITING;
+	
+	Timer* shoot_timer;
 	float shooter_rate = 0.0;
+	bool shot_ball = false;
 	
 	void setState(State new_state);
 	
 	void initialize()
 	{
-		
+		shoot_timer = new Timer();
 	}
 	
 	void process()
@@ -27,6 +32,15 @@ namespace Coordination
 			break;
 		
 		case State::SHOOTING_BALL:
+			if (ShooterWheels::atRate() || shoot_timer->Get() > SHOOT_SPEED_UP_TIME) {
+				if (shot_ball && HolderWheels::getState() == HolderWheels::WAITING) {
+					setState(WAITING);
+				}
+				else {
+					HolderWheels::shootBall();
+					shot_ball = true;
+				}
+			}
 			break;
 		
 		case State::AUTO_AIM:
@@ -99,7 +113,16 @@ namespace Coordination
 				break;
 			
 			case State::SHOOTING_BALL:
-				ShooterWheels::setRate(shooter_rate);
+				shot_ball = false;
+				shoot_timer->Start();
+				shoot_timer->Reset();
+				
+				if (ShooterWheels::getState() != ShooterWheels::State::MAINTAINING_RATE) {
+					// don't set the rate if already maintaining a rate because then
+					// the shooter wheels won't consider themselves as up-to-speed
+					// and the drivers will have to wait another second
+					ShooterWheels::setRate(shooter_rate);
+				}
 				break;
 			
 			case State::AUTO_AIM:

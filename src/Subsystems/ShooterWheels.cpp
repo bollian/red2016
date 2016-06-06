@@ -140,6 +140,11 @@ namespace ShooterWheels
 		setState(State::MANUAL_CONTROL);
 	}
 	
+	State getState()
+	{
+		return state;
+	}
+	
 	void setState(State new_state)
 	{
 		if (state != new_state) {
