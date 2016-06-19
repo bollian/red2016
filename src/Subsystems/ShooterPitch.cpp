@@ -22,7 +22,6 @@ namespace ShooterPitch
 	};
 	
 	State state = State::WAITING;
-	float target_angle = 0.0;
 	
 	ShooterPitchPID* pid_manager = ShooterPitchPID::getInstance();
 	SpeedController* pitch_motor;
@@ -44,18 +43,14 @@ namespace ShooterPitch
 		case State::DISABLED:
 			setSpeed(0.0);
 			break;
+		
 		case State::WAITING:
-			break;
 		case State::MANUAL_CONTROL:
-			pid_manager->enable(false);
 			break;
 		
 		case State::REACHING_ANGLE:
-			if (pid_manager->isEnabled()) {
-				pid_manager->setTarget(target_angle); // in case pid is enabled while going to an angle
-			}
-			else {
-				float error = target_angle - Sensors::getShooterAngle();
+			if (!pid_manager->isEnabled()) {
+				float error = pid_manager->getTarget() - Sensors::getShooterAngle();
 				if (fabs(error) < ACCEPTABLE_ERROR) {
 					if (error > 0) {
 						setDirection(Utils::VerticalDirection::UP);
@@ -103,6 +98,7 @@ namespace ShooterPitch
 	
 	void goToAngle(float degrees)
 	{
+		pid_manager->setTarget(degrees);
 		setState(State::REACHING_ANGLE);
 	}
 	
