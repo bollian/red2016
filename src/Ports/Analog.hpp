@@ -6,9 +6,9 @@ namespace AnalogPorts
 	extern const unsigned int INTAKE_ENCODER;
 	extern const unsigned int SHOOTER_ENCODER;
 	extern const unsigned int SHOOTER_AZIMUTH_ENCODER;
-	extern const unsigned int AUTONOMOUS_NAVX_A;
-	extern const unsigned int AUTONOMOUS_NAVX_B;
-	extern const unsigned int AUTONOMOUS_NAVX_C;
+	extern const unsigned int AUTONOMOUS_POSITION_SWITCH;
+	extern const unsigned int AUTONOMOUS_DEFENSE_SWITCH;
+	extern const unsigned int AUTONOMOUS_SHOOT_SWITCH;
 }
 
 #endif /* SRC_PORTS_ANALOG_H_ */
