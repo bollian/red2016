@@ -112,6 +112,7 @@ namespace Mobility
 	
 	void driveStraight(float speed)
 	{
+		target_angle = Sensors::getRobotAngle();
 		target_speed = speed;
 		setState(State::DRIVE_STRAIGHT);
 	}
@@ -120,6 +121,7 @@ namespace Mobility
 	{
 		left_target_dist = Sensors::getLeftEncoderDistance() + distance;
 		right_target_dist = Sensors::getRightEncoderDistance() + distance;
+		target_angle = Sensors::getRobotAngle();
 		setState(State::DRIVE_DISTANCE);
 	}
 	
@@ -148,24 +150,6 @@ namespace Mobility
 			case State::DRIVE_DISTANCE:
 				setLeftSpeed(0.0);
 				setRightSpeed(0.0);
-				break;
-			}
-			
-			switch (new_state) {
-			case State::DISABLED:
-				left_motor1->Set(0.0);
-				left_motor2->Set(0.0);
-				right_motor1->Set(0.0);
-				right_motor2->Set(0.0);
-				break;
-			
-			case State::MANUAL_CONTROL:
-			case State::WAITING:
-				break;
-				
-			case State::DRIVE_DISTANCE:
-			case State::DRIVE_STRAIGHT:
-				target_angle = Sensors::getRobotAngle();
 				break;
 			}
 			

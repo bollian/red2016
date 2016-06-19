@@ -89,17 +89,20 @@ namespace IntakeAngle
 	
 	void engageManualControl()
 	{
+		pid_manager->enable(false);
 		setState(State::MANUAL_CONTROL);
 	}
 	
 	void goToAngle(float degrees)
 	{
 		pid_manager->setTarget(degrees);
+		pid_manager->enable(OI::isPIDEnabled());
 		setState(State::REACHING_ANGLE);
 	}
 	
 	void interrupt()
 	{
+		pid_manager->enable(false);
 		setState(State::WAITING);
 	}
 	
@@ -127,25 +130,13 @@ namespace IntakeAngle
 			switch (state) {
 			case State::DISABLED:
 				return; // if this subsystem is disabled, do not allow a reenable
+			
 			case State::WAITING:
 				break;
 				
 			case State::MANUAL_CONTROL:
 			case State::REACHING_ANGLE:
 				setDirection(Utils::VerticalDirection::V_STILL);
-				break;
-			}
-			
-			// handle the state we're entering
-			switch (new_state) {
-			case State::DISABLED:
-			case State::WAITING:
-			case State::MANUAL_CONTROL:
-				pid_manager->enable(false);
-				break;
-			
-			case State::REACHING_ANGLE:
-				pid_manager->enable(OI::isPIDEnabled());
 				break;
 			}
 		}

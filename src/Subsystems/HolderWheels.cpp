@@ -82,6 +82,8 @@ namespace HolderWheels
 	
 	void shootBall()
 	{
+		shoot_timer->Start();
+		shoot_timer->Reset();
 		setState(State::SHOOTING_BALL);
 	}
 	
@@ -110,19 +112,6 @@ namespace HolderWheels
 			case State::SHOOTING_BALL:
 				setSpeed(0.0);
 				shoot_timer->Stop();
-				break;
-			}
-			
-			switch (new_state) {
-			case State::DISABLED:
-				wheels_motor->Set(0.0);
-				break;
-			
-			case State::WAITING:
-			case State::MANUAL_CONTROL:
-			case State::SHOOTING_BALL:
-				shoot_timer->Start();
-				shoot_timer->Reset();
 				break;
 			}
 			

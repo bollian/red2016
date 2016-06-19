@@ -83,6 +83,11 @@ namespace ShooterWheels
 		if (OI::isPIDEnabled()) {
 			pid_manager->enable(true);
 			pid_manager->setTarget(rate);
+			
+			target_timer->Start();
+			target_timer->Reset();
+			on_target_count = 0;
+			
 			setState(State::MAINTAINING_RATE);
 		}
 		else {
@@ -158,24 +163,6 @@ namespace ShooterWheels
 			case State::MANUAL_CONTROL:
 			case State::MAINTAINING_RATE:
 				setSpeed(0.0);
-				break;
-			}
-			
-			switch (new_state) {
-			case State::DISABLED:
-				wheels_motor->Set(0.0);
-				break;
-			
-			case State::WAITING:
-				break;
-			
-			case State::MANUAL_CONTROL:
-				break;
-			
-			case State::MAINTAINING_RATE:
-				target_timer->Start();
-				target_timer->Reset();
-				on_target_count = 0;
 				break;
 			}
 			

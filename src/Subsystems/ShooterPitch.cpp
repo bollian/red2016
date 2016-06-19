@@ -93,17 +93,20 @@ namespace ShooterPitch
 	
 	void engageManualControl()
 	{
+		pid_manager->enable(false);
 		setState(State::MANUAL_CONTROL);
 	}
 	
 	void goToAngle(float degrees)
 	{
 		pid_manager->setTarget(degrees);
+		pid_manager->enable(OI::isPIDEnabled());
 		setState(State::REACHING_ANGLE);
 	}
 	
 	void interrupt()
 	{
+		pid_manager->enable(false);
 		setState(State::WAITING);
 	}
 	
@@ -136,6 +139,7 @@ namespace ShooterPitch
 			switch (state) {
 			case State::DISABLED:
 				return; // if the subsystem is disabled, do not allow a reenable
+			
 			case State::WAITING:
 				break;
 			
@@ -145,17 +149,7 @@ namespace ShooterPitch
 				break;
 			}
 			
-			switch (new_state) {
-			case State::DISABLED:
-			case State::WAITING:
-			case State::MANUAL_CONTROL:
-				pid_manager->enable(false);
-				break;
-				
-			case State::REACHING_ANGLE:
-				pid_manager->enable(OI::isPIDEnabled());
-				break;
-			}
+			state = new_state;
 		}
 	}
 }
