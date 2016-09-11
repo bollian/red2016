@@ -41,7 +41,9 @@ namespace ED
  *
  * There is no input range, because setting maximum and minimum values for
  * sensor input is easily implemented in the returnPIDInput input function,
- * the same way and output range can be implemented in usePIDOutput.
+ * the same way and output range can be implemented in usePIDOutput.  If
+ * wrapping behavior is desired, use the getRelative function from Utils.hpp
+ * inside returnPIDInput.
  *
  * PIDManager is safe in a multithreaded environment when there is no more
  * than one user of the class on a separate thread.

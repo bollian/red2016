@@ -1,3 +1,4 @@
+#include <ED/Utils.hpp>
 #include <NAVX/AHRS.h>
 #include <Ports/Analog.hpp>
 #include <Ports/CAN.hpp>
@@ -188,7 +189,7 @@ namespace Sensors
 	{
 		if (isIntakeAngleEnabled()) {
 			float voltage = intake_encoder->GetVoltage() + INTAKE_ENCODER_VOLT_SHIFT; // shift the voltages away from the 0.0 - 5.0 discontinuity
-			voltage = Utils::wrap(voltage, 0.0, 5.0);
+			voltage = ED::wrap(voltage, 0.0, 5.0);
 			voltage = 5.0 - voltage; // flip the voltages so that higher values give higher angles
 			return 90.0 * (voltage - MIN_INTAKE_ENCODER_VOLT) / (MAX_INTAKE_ENCODER_VOLT - MIN_INTAKE_ENCODER_VOLT);
 		}

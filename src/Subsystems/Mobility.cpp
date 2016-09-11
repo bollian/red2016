@@ -1,3 +1,4 @@
+#include <ED/Utils.hpp>
 #include <Ports/Motor.hpp>
 #include <math.h>
 #include <Subsystems/Mobility.hpp>
@@ -60,11 +61,11 @@ namespace Mobility
 				break;
 			}
 			else {
-				target_speed = Utils::boundsCheck(((left_target_dist - left_dist) + (right_target_dist - right_dist)) / 2.0, -1.0, 1.0);
+				target_speed = ED::boundsCheck(((left_target_dist - left_dist) + (right_target_dist - right_dist)) / 2.0, -1.0, 1.0);
 			}
 		case State::DRIVE_STRAIGHT:
 			float adjusted_speed = MAX_SPEED_ADJUSTMENT *
-			    Utils::getRelative(Sensors::getRobotAngle(), target_angle, Sensors::MIN_GYRO_ANGLE, Sensors::MAX_GYRO_ANGLE) / 180.0;
+			    ED::getRelative(Sensors::getRobotAngle(), target_angle, Sensors::MIN_GYRO_ANGLE, Sensors::MAX_GYRO_ANGLE) / 180.0;
 			setLeftSpeed(target_speed - adjusted_speed);
 			setRightSpeed(target_speed + adjusted_speed);
 			break;

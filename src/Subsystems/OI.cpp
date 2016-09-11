@@ -1,3 +1,4 @@
+#include <ED/Utils.hpp>
 #include <Coordination.hpp>
 #include <Ports/OI.hpp>
 #include <Subsystems/ClimberArm.hpp>
@@ -90,7 +91,7 @@ namespace OI
 	{
 		float joy_value = -joy->GetRawAxis(port);
 		
-		if (deadzone != 0.0 && Utils::valueInRange(joy_value, -deadzone, deadzone)) {
+		if (deadzone != 0.0 && ED::valueInRange(joy_value, -deadzone, deadzone)) {
 			return 0.0;
 		}
 		
@@ -116,7 +117,7 @@ namespace OI
 	
 	void intakeProcess()
 	{
-		int dial = Utils::convertVoltage(getJoystickAnalogPort(buttons_joy1, OIPorts::INTAKE_ANGLE_DIAL) + 1.0, IntakeAngle::getPresetCount(), 2.0);
+		int dial = ED::convertVoltage(getJoystickAnalogPort(buttons_joy1, OIPorts::INTAKE_ANGLE_DIAL) + 1.0, IntakeAngle::getPresetCount(), 2.0);
 		
 		Utils::VerticalDirection intake_angle_dir = Utils::VerticalDirection::V_STILL;
 		if (buttons_joy1->GetRawButton(OIPorts::MOVE_INTAKE_UP_BUTTON)) {
@@ -159,7 +160,7 @@ namespace OI
 	void shooterPitchProcess()
 	{
 		////// Shooter pitch dial //////
-		int dial = Utils::convertVoltage(getJoystickAnalogPort(buttons_joy1, OIPorts::SHOOTER_PITCH_DIAL) + 1.0, ShooterPitch::getPresetCount(), 2.0);
+		int dial = ED::convertVoltage(getJoystickAnalogPort(buttons_joy1, OIPorts::SHOOTER_PITCH_DIAL) + 1.0, ShooterPitch::getPresetCount(), 2.0);
 		if (dial != last_shooter_pitch_dial) { // if the dial has been moved
 			ShooterPitch::goToAngle(ShooterPitch::getAnglePreset(dial));
 			
@@ -172,7 +173,7 @@ namespace OI
 		bool shooter_switch = buttons_joy1->GetRawButton(OIPorts::SHOOTER_WHEELS_SWITCH);
 		
 		// the current position of the shooter dial
-		int dial = Utils::convertVoltage(getJoystickAnalogPort(buttons_joy1, OIPorts::SHOOTER_SPEED_DIAL) + 1.0, ShooterWheels::getPresetCount(), 2.0);
+		int dial = ED::convertVoltage(getJoystickAnalogPort(buttons_joy1, OIPorts::SHOOTER_SPEED_DIAL) + 1.0, ShooterWheels::getPresetCount(), 2.0);
 		
 		float speed; // is used later for the shoot button as well; might refer to either `rate` or `speed`
 		if (Sensors::isShooterTachEnabled()) {
