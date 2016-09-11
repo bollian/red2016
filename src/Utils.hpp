@@ -17,9 +17,6 @@ namespace Utils
 		H_STILL = 0,
 		OUT = -1
 	};
-	void setDirection(void (*setter)(float), float up_speed, float down_speed, int dir);
-	int getDirection(float (*getter)());
-
 	enum MotorType
 	{
 		CAN_TALON,

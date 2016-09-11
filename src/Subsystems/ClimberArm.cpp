@@ -27,7 +27,17 @@ namespace ClimberArm
 
 	void setDirection(Utils::VerticalDirection dir)
 	{
-		Utils::setDirection(&setSpeed, UPWARD_SPEED, DOWNWARD_SPEED, (int)dir);
+		switch (dir) {
+		case Utils::VerticalDirection::UP:
+			setSpeed(UPWARD_SPEED);
+			break;
+		case Utils::VerticalDirection::V_STILL:
+			setSpeed(0.0);
+			break;
+		case Utils::VerticalDirection::DOWN:
+			setSpeed(DOWNWARD_SPEED);
+			break;
+		}
 	}
 
 	float getSpeed()
@@ -37,6 +47,13 @@ namespace ClimberArm
 
 	Utils::VerticalDirection getDirection()
 	{
-		return (Utils::VerticalDirection)Utils::getDirection(&getSpeed);
+		float speed = getSpeed();
+		if (speed < 0.0) {
+			return Utils::VerticalDirection::DOWN;
+		}
+		else if (speed > 0.0) {
+			return Utils::VerticalDirection::UP;
+		}
+		return Utils::VerticalDirection::V_STILL;
 	}
 }

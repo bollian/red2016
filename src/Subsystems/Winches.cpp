@@ -33,12 +33,32 @@ namespace Winches
 
 	void setFrontDirection(Utils::VerticalDirection dir)
 	{
-		Utils::setDirection(&setFrontSpeed, WINCH_SPEED, WINCH_SPEED, (int)dir);
+		switch (dir) {
+		case Utils::VerticalDirection::UP:
+			setFrontSpeed(WINCH_SPEED);
+			break;
+		case Utils::VerticalDirection::V_STILL:
+			setFrontSpeed(0.0);
+			break;
+		case Utils::VerticalDirection::DOWN:
+			setFrontSpeed(-WINCH_SPEED);
+			break;
+		}
 	}
 
 	void setBackDirection(Utils::VerticalDirection dir)
 	{
-		Utils::setDirection(&setBackSpeed, WINCH_SPEED, WINCH_SPEED, (int)dir);
+		switch (dir) {
+		case Utils::VerticalDirection::UP:
+			setBackSpeed(WINCH_SPEED);
+			break;
+		case Utils::VerticalDirection::V_STILL:
+			setBackSpeed(0.0);
+			break;
+		case Utils::VerticalDirection::DOWN:
+			setBackSpeed(-WINCH_SPEED);
+			break;
+		}
 	}
 
 	float getFrontSpeed()
@@ -51,13 +71,24 @@ namespace Winches
 		return -back_winch->Get();
 	}
 
+	Utils::VerticalDirection getDirection(float speed)
+	{
+		if (speed > 0.0) {
+			return Utils::VerticalDirection::UP;
+		}
+		if (speed < 0.0) {
+			return Utils::VerticalDirection::DOWN;
+		}
+		return Utils::VerticalDirection::V_STILL;
+	}
+
 	Utils::VerticalDirection getFrontDirection()
 	{
-		return (Utils::VerticalDirection)Utils::getDirection(&getFrontSpeed);
+		return getDirection(getFrontSpeed());
 	}
 
 	Utils::VerticalDirection getBackDirection()
 	{
-		return (Utils::VerticalDirection)Utils::getDirection(&getBackSpeed);
+		return getDirection(getBackSpeed());
 	}
 }

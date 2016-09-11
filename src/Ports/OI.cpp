@@ -25,8 +25,8 @@ namespace OIPorts
 	const unsigned int MOVE_INTAKE_UP_BUTTON = 3;
 	const unsigned int MOVE_INTAKE_DOWN_BUTTON = 4;
 	const unsigned int PID_ENABLE_SWITCH = 5;
-	const unsigned int INTAKE_BELT_FORWARD_SWITCH = 6;
-	const unsigned int INTAKE_BELT_BACKWARD_SWITCH = 7;
+	const unsigned int INTAKE_BELT_INWARD_SWITCH = 6;
+	const unsigned int INTAKE_BELT_OUTWARD_SWITCH = 7;
 	const unsigned int SENSOR_ENABLE_SWITCH = 8;
 	const unsigned int SHOOTER_WHEELS_SWITCH = 9;
 

@@ -26,8 +26,8 @@ namespace OIPorts
 	extern const unsigned int MOVE_INTAKE_UP_BUTTON;
 	extern const unsigned int MOVE_INTAKE_DOWN_BUTTON;
 	extern const unsigned int PID_ENABLE_SWITCH;
-	extern const unsigned int INTAKE_BELT_FORWARD_SWITCH;
-	extern const unsigned int INTAKE_BELT_BACKWARD_SWITCH;
+	extern const unsigned int INTAKE_BELT_INWARD_SWITCH;
+	extern const unsigned int INTAKE_BELT_OUTWARD_SWITCH;
 	extern const unsigned int SENSOR_ENABLE_SWITCH;
 	extern const unsigned int SHOOTER_WHEELS_SWITCH;
 

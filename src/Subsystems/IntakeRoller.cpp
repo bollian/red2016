@@ -26,7 +26,17 @@ namespace IntakeRoller
 
 	void setDirection(Utils::HorizontalDirection dir)
 	{
-		Utils::setDirection(&setSpeed, MOTOR_SPEED, MOTOR_SPEED, (int)dir);
+		switch (dir) {
+		case Utils::HorizontalDirection::IN:
+			setSpeed(MOTOR_SPEED);
+			break;
+		case Utils::HorizontalDirection::H_STILL:
+			setSpeed(0.0);
+			break;
+		case Utils::HorizontalDirection::OUT:
+			setSpeed(MOTOR_SPEED);
+			break;
+		}
 	}
 
 	float getSpeed()
@@ -36,6 +46,13 @@ namespace IntakeRoller
 
 	Utils::HorizontalDirection getDirection()
 	{
-		return (Utils::HorizontalDirection)Utils::getDirection(&getSpeed);
+		float speed = getSpeed();
+		if (speed > 0.0) {
+			return Utils::HorizontalDirection::IN;
+		}
+		else if (speed < 0.0) {
+			return Utils::HorizontalDirection::OUT;
+		}
+		return Utils::HorizontalDirection::H_STILL;
 	}
 }

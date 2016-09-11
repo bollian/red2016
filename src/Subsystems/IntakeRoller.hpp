@@ -8,7 +8,7 @@ namespace IntakeRoller
 	void initialize();
 	void process();
 
-	void setDirection(Utils::VerticalDirection dir);
+	void setDirection(Utils::HorizontalDirection dir);
 	Utils::HorizontalDirection getDirection();
 }
 

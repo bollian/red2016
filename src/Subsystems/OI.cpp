@@ -2,7 +2,9 @@
 #include <Coordination.hpp>
 #include <Ports/OI.hpp>
 #include <Subsystems/ClimberArm.hpp>
+#include <Subsystems/HolderWheels.hpp>
 #include <Subsystems/IntakeAngle.hpp>
+#include <Subsystems/IntakeRoller.hpp>
 #include <Subsystems/Mobility.hpp>
 #include <Subsystems/OI.hpp>
 #include <Subsystems/Sensors.hpp>
@@ -28,6 +30,7 @@ namespace OI
 	int last_shooter_pitch_dial = -1;
 	int last_shooter_wheels_dial = -1;
 	Utils::VerticalDirection last_intake_angle_dir = Utils::VerticalDirection::V_STILL;
+	Utils::HorizontalDirection last_intake_roller_dir = Utils::HorizontalDirection::H_STILL;
 
 	float getJoystickAnalogPort(Joystick* joy, unsigned int port, float deadzone = 0.0);
 	
@@ -153,6 +156,28 @@ namespace OI
 			break;
 		}
 		
+		if (buttons_joy1->GetRawButton(OIPorts::INTAKE_BELT_INWARD_SWITCH)) {
+			last_intake_roller_dir = Utils::HorizontalDirection::IN;
+
+			HolderWheels::engageManualControl();
+			HolderWheels::setDirection(last_intake_roller_dir);
+			IntakeRoller::setDirection(last_intake_roller_dir);
+		}
+		else if (buttons_joy1->GetRawButton(OIPorts::INTAKE_BELT_OUTWARD_SWITCH)) {
+			last_intake_roller_dir = Utils::HorizontalDirection::OUT;
+
+			HolderWheels::engageManualControl();
+			HolderWheels::setDirection(last_intake_roller_dir);
+			IntakeRoller::setDirection(last_intake_roller_dir);
+		}
+		else if (last_intake_roller_dir != Utils::HorizontalDirection::H_STILL) {
+			last_intake_roller_dir = Utils::HorizontalDirection::H_STILL;
+
+			HolderWheels::engageManualControl();
+			HolderWheels::setDirection(last_intake_roller_dir);
+			IntakeRoller::setDirection(last_intake_roller_dir);
+		}
+
 		last_intake_angle_dial = dial; // prevent the dial from taking control after manual controls are over
 		last_intake_angle_dir = intake_angle_dir;
 	}

@@ -110,7 +110,17 @@ namespace ShooterPitch
 
 	void setDirection(Utils::VerticalDirection dir)
 	{
-		Utils::setDirection(&setSpeed, MOTOR_SPEED, MOTOR_SPEED, (int)dir);
+		switch (dir) {
+		case Utils::VerticalDirection::UP:
+			setSpeed(MOTOR_SPEED);
+			break;
+		case Utils::VerticalDirection::V_STILL:
+			setSpeed(0.0);
+			break;
+		case Utils::VerticalDirection::DOWN:
+			setSpeed(-MOTOR_SPEED);
+			break;
+		}
 	}
 
 	float getSpeed()
@@ -120,7 +130,14 @@ namespace ShooterPitch
 
 	Utils::VerticalDirection getDirection()
 	{
-		return (Utils::VerticalDirection)Utils::getDirection(&getSpeed);
+		float speed = getSpeed();
+		if (speed > 0.0) {
+			return Utils::VerticalDirection::UP;
+		}
+		else if (speed < 0.0) {
+			return Utils::VerticalDirection::DOWN;
+		}
+		return Utils::VerticalDirection::V_STILL;
 	}
 	
 	void engageManualControl()
