@@ -1,10 +1,30 @@
-#include <PID/IntakeAngle.hpp>
+#include <ED/PIDManager.hpp>
 #include <Ports/Motor.hpp>
 #include <Subsystems/IntakeAngle.hpp>
 #include <Subsystems/OI.hpp>
 #include <Subsystems/Sensors.hpp>
 #include <Utils.hpp>
 #include <WPILib.h>
+
+class IntakeAnglePID : public ED::PIDManager
+{
+public:
+	IntakeAnglePID() : PIDManager(0.02, 0.0001, 0.0)
+	{
+		autoClearAccumulatedError(true);
+	}
+
+protected:
+	float returnPIDInput()
+	{
+		return Sensors::getIntakeAngle();
+	}
+
+	void usePIDOutput(float output, float feed_forward)
+	{
+		IntakeAngle::setSpeed(output);
+	}
+};
 
 namespace IntakeAngle
 {
@@ -22,13 +42,14 @@ namespace IntakeAngle
 	
 	State state = State::WAITING;
 
-	IntakeAnglePID* pid_manager = IntakeAnglePID::getInstance();
-	SpeedController* angle_motor;
+	IntakeAnglePID* pid_manager = nullptr;
+	SpeedController* angle_motor = nullptr;
 	
 	void setState(State new_state);
 
 	void initialize()
 	{
+		pid_manager = new IntakeAnglePID();
 		angle_motor = Utils::constructMotor(MotorPorts::INTAKE_ANGLE_MOTOR);
 	}
 
@@ -63,6 +84,16 @@ namespace IntakeAngle
 			}
 			break;
 		}
+	}
+
+	void processPID()
+	{
+		pid_manager->process();
+	}
+
+	void enablePID(bool enable)
+	{
+		pid_manager->enable(enable);
 	}
 
 	void setSpeed(float speed)

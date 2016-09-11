@@ -28,17 +28,13 @@ void Robot::RobotInit()
 	Winches::initialize();
 	
 	Coordination::initialize();
-	
-	intake_angle_pid = IntakeAnglePID::getInstance();
-	shooter_pitch_pid = ShooterPitchPID::getInstance();
-	shooter_wheels_pid = ShooterWheelsPID::getInstance();
 }
 
 void Robot::Disabled()
 {
-	intake_angle_pid->enable(false);
-	shooter_pitch_pid->enable(false);
-	shooter_wheels_pid->enable(false);
+	IntakeAngle::enablePID(false);
+	ShooterPitch::enablePID(false);
+	ShooterWheels::enablePID(false);
 	
 	interruptAll();
 	
@@ -58,9 +54,9 @@ void Robot::Disabled()
 
 void Robot::Autonomous()
 {
-	intake_angle_pid->enable(true);
-	shooter_pitch_pid->enable(true);
-	shooter_wheels_pid->enable(true);
+	IntakeAngle::enablePID(true);
+	ShooterPitch::enablePID(true);
+	ShooterWheels::enablePID(true);
 	
 	interruptAll();
 	
@@ -83,9 +79,9 @@ void Robot::Autonomous()
 void Robot::OperatorControl()
 {
 	bool enable_pid = OI::isPIDEnabled();
-	intake_angle_pid->enable(enable_pid);
-	shooter_pitch_pid->enable(enable_pid);
-	shooter_wheels_pid->enable(enable_pid);
+	IntakeAngle::enablePID(enable_pid);
+	ShooterPitch::enablePID(enable_pid);
+	ShooterWheels::enablePID(enable_pid);
 	
 	interruptAll();
 	
@@ -118,9 +114,9 @@ void Robot::Test()
 
 void Robot::processPID()
 {
-	intake_angle_pid->process();
-	shooter_pitch_pid->process();
-	shooter_wheels_pid->process();
+	IntakeAngle::processPID();
+	ShooterPitch::processPID();
+	ShooterWheels::processPID();
 }
 
 void Robot::interruptAll()

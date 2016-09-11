@@ -1,10 +1,30 @@
-#include <PID/ShooterPitch.hpp>
+#include <ED/PIDManager.hpp>
 #include <Ports/Motor.hpp>
 #include <Subsystems/OI.hpp>
 #include <Subsystems/Sensors.hpp>
 #include <Subsystems/ShooterPitch.hpp>
 #include <Utils.hpp>
 #include <WPILib.h>
+
+class ShooterPitchPID : public ED::PIDManager
+{
+public:
+	ShooterPitchPID() : PIDManager(0.1, 0.0001, 0.0)
+	{
+		autoClearAccumulatedError(true);
+	}
+
+protected:
+	float returnPIDInput()
+	{
+		return Sensors::getShooterAngle();
+	}
+
+	void usePIDOutput(float output, float feed_forward)
+	{
+		ShooterPitch::setSpeed(output);
+	}
+};
 
 namespace ShooterPitch
 {
@@ -23,13 +43,14 @@ namespace ShooterPitch
 	
 	State state = State::WAITING;
 	
-	ShooterPitchPID* pid_manager = ShooterPitchPID::getInstance();
-	SpeedController* pitch_motor;
+	ShooterPitchPID* pid_manager = nullptr;
+	SpeedController* pitch_motor = nullptr;
 	
 	void setState(State new_state);
 	
 	void initialize()
 	{
+		pid_manager = new ShooterPitchPID();
 		pitch_motor = Utils::constructMotor(MotorPorts::SHOOTER_PITCH_MOTOR);
 	}
 
@@ -42,6 +63,7 @@ namespace ShooterPitch
 		switch (state) {
 		case State::DISABLED:
 			setSpeed(0.0);
+			enablePID(false);
 			break;
 		
 		case State::WAITING:
@@ -64,6 +86,16 @@ namespace ShooterPitch
 				}
 			}
 		}
+	}
+
+	void processPID()
+	{
+		pid_manager->process();
+	}
+
+	void enablePID(bool enable)
+	{
+		pid_manager->enable(enable);
 	}
 
 	void setSpeed(float speed)
@@ -93,20 +125,20 @@ namespace ShooterPitch
 	
 	void engageManualControl()
 	{
-		pid_manager->enable(false);
+		enablePID(false);
 		setState(State::MANUAL_CONTROL);
 	}
 	
 	void goToAngle(float degrees)
 	{
 		pid_manager->setTarget(degrees);
-		pid_manager->enable(OI::isPIDEnabled());
+		enablePID(OI::isPIDEnabled());
 		setState(State::REACHING_ANGLE);
 	}
 	
 	void interrupt()
 	{
-		pid_manager->enable(false);
+		enablePID(false);
 		setState(State::WAITING);
 	}
 	

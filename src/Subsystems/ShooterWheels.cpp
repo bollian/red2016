@@ -1,11 +1,38 @@
 #include <math.h>
+#include <ED/PIDManager.hpp>
 #include <Ports/Motor.hpp>
-#include <PID/ShooterWheels.hpp>
 #include <Subsystems/OI.hpp>
 #include <Subsystems/Sensors.hpp>
 #include <Subsystems/ShooterWheels.hpp>
 #include <Utils.hpp>
 #include <WPILib.h>
+
+const float F_COEFFICIENT = 0.00016;
+class ShooterWheelsPID : public ED::PIDManager
+{
+public:
+	ShooterWheelsPID() : PIDManager(0.001, 0.0, 0.001)
+	{
+		autoClearAccumulatedError(true);
+	}
+
+protected:
+	float returnPIDInput()
+	{
+		return Sensors::getShooterWheelRate();
+	}
+
+	float getFeedForwardOutput(float new_target)
+	{
+		return F_COEFFICIENT * (new_target / 5000.0);
+	}
+
+	void usePIDOutput(float output, float feed_forward)
+	{
+		ShooterWheels::setSpeed(output + feed_forward);
+	}
+
+};
 
 namespace ShooterWheels
 {
@@ -31,8 +58,8 @@ namespace ShooterWheels
 	
 	State state = State::WAITING;
 	
-	ShooterWheelsPID* pid_manager = ShooterWheelsPID::getInstance();
-	SpeedController* wheels_motor;
+	ShooterWheelsPID* pid_manager = nullptr;
+	SpeedController* wheels_motor = nullptr;
 	
 	Timer* target_timer;
 	int on_target_count = 0;
@@ -41,6 +68,7 @@ namespace ShooterWheels
 	
 	void initialize()
 	{
+		pid_manager = new ShooterWheelsPID();
 		wheels_motor = Utils::constructMotor(MotorPorts::SHOOTER_WHEELS_MOTOR);
 		
 		target_timer = new Timer();
@@ -69,6 +97,16 @@ namespace ShooterWheels
 			}
 			break;
 		}
+	}
+
+	void processPID()
+	{
+		pid_manager->process();
+	}
+
+	void enablePID(bool enable)
+	{
+		pid_manager->enable(enable);
 	}
 
 	void setSpeed(float speed)

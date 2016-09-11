@@ -1,7 +1,4 @@
 #include <Coordination.hpp>
-#include <PID/IntakeAngle.hpp>
-#include <PID/ShooterPitch.hpp>
-#include <PID/ShooterWheels.hpp>
 #include <Ports/OI.hpp>
 #include <Subsystems/ClimberArm.hpp>
 #include <Subsystems/IntakeAngle.hpp>
@@ -30,10 +27,6 @@ namespace OI
 	int last_shooter_pitch_dial = -1;
 	int last_shooter_wheels_dial = -1;
 	Utils::VerticalDirection last_intake_angle_dir = Utils::VerticalDirection::V_STILL;
-	
-	IntakeAnglePID* intake_angle_pid = IntakeAnglePID::getInstance();
-	ShooterPitchPID* shooter_pitch_pid = ShooterPitchPID::getInstance();
-	ShooterWheelsPID* shooter_wheels_pid = ShooterWheelsPID::getInstance();
 
 	float getJoystickAnalogPort(Joystick* joy, unsigned int port, float deadzone = 0.0);
 	
@@ -74,9 +67,9 @@ namespace OI
 			pid_switch = false;
 		}
 		if (pid_switch != pid_switch) {
-			IntakeAnglePID::getInstance()->enable(pid_switch);
-			ShooterPitchPID::getInstance()->enable(pid_switch);
-			ShooterWheelsPID::getInstance()->enable(pid_switch);
+			IntakeAngle::enablePID(pid_switch);
+			ShooterPitch::enablePID(pid_switch);
+			ShooterWheels::enablePID(pid_switch);
 			
 			last_pid_switch = pid_switch;
 		}

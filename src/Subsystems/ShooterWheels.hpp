@@ -12,6 +12,8 @@ namespace ShooterWheels
 	
 	void initialize();
 	void process();
+	void processPID();
+	void enablePID(bool enable);
 
 	void setSpeed(float speed);
 	void setRate(float rate);

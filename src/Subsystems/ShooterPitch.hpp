@@ -16,6 +16,8 @@ namespace ShooterPitch
 
 	void initialize();
 	void process();
+	void processPID();
+	void enablePID(bool enable);
 
 	void setSpeed(float speed);
 	void setDirection(Utils::VerticalDirection dir);
