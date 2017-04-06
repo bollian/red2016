@@ -8,7 +8,9 @@ red2016 is a rewrite of team 116, Epsilon Delta's code for the FIRST Stronghold 
 
 ## Structure
 
-For those familiar with the different code structures made available to FIRST Robotics Competition teams, red2016 tries to be a merger between the Iterative and Command-Based styles of robot code.  For everyone else, that sentence wasn't at all helpful, so I shall elaborate.
+For those familiar with the different code structures made available to FIRST Robotics Competition teams, red2016 tries to be a merger between the Iterative and Command-Based styles of robot code.  For everyone else, that sentence wasn't at all helpful, so I shall elaborate below.
+
+The build system remains unchanged from what is normally encountered in FRC, aside from the dependency on Cross the Roads Electronics' library for the TalonSRX motor controller.  Visit [documentation](http://www.ctr-electronics.com/talon-srx.html#product_tabs_technical_resources) and [library](http://www.ctr-electronics.com/hro.html#product_tabs_technical_resources) for up-to-date information on how to get TalonSRXs working with your controls system.
 
 ### Robot
 

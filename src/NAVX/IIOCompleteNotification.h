@@ -8,10 +8,10 @@
 #ifndef SRC_IIOCOMPLETENOTIFICATION_H_
 #define SRC_IIOCOMPLETENOTIFICATION_H_
 
-#include <NAVX/AHRSProtocol.h>
-#include <NAVX/IMUProtocol.h>
 #include <stdint.h>
 
+#include <NAVX/IMUProtocol.h>
+#include <NAVX/AHRSProtocol.h>
 
 class IIOCompleteNotification {
 public:
@@ -32,6 +32,7 @@ public:
     virtual void SetRawData(IMUProtocol::GyroUpdate& raw_data_update, long sensor_timestamp) = 0;
     virtual void SetBoardID(AHRSProtocol::BoardID& board_id) = 0;
     virtual void SetBoardState( BoardState& board_state) = 0;
+    virtual void YawResetComplete() = 0;
 };
 
 #endif /* SRC_IIOCOMPLETENOTIFICATION_H_ */

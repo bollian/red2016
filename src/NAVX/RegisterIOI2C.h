@@ -9,7 +9,7 @@
 #define SRC_REGISTERIOI2C_H_
 
 #include <NAVX/RegisterIO.h>
-#include "WPILib.h"
+#include <WPILib.h>
 
 class RegisterIO_I2C : public IRegisterIO {
 public:
@@ -19,6 +19,7 @@ public:
     bool Write(uint8_t address, uint8_t value );
     bool Read(uint8_t first_address, uint8_t* buffer, uint8_t buffer_len);
     bool Shutdown();
+    void EnableLogging(bool enable);
 private:
     I2C *port;
     bool trace;

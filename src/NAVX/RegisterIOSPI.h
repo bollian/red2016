@@ -9,7 +9,7 @@
 #define SRC_REGISTERIOSPI_H_
 
 #include <NAVX/RegisterIO.h>
-#include "WPILib.h"
+#include <WPILib.h>
 
 static const int MAX_SPI_MSG_LENGTH = 256;
 
@@ -21,6 +21,7 @@ public:
     bool Write(uint8_t address, uint8_t value );
     bool Read(uint8_t first_address, uint8_t* buffer, uint8_t buffer_len);
     bool Shutdown();
+    void EnableLogging(bool enable);
 private:
     SPI *port;
     uint32_t bitrate;

@@ -6,12 +6,12 @@
  */
 
 #include <NAVX/RegisterIOI2C.h>
-#include "HAL/cpp/priority_mutex.h"
+#include <HAL/cpp/priority_mutex.h>
 
 static priority_mutex imu_mutex;
 RegisterIO_I2C::RegisterIO_I2C(I2C* port) {
     this->port = port;
-    this->trace = true;
+    this->trace = false;
 }
 
 bool RegisterIO_I2C::Init() {
@@ -20,9 +20,9 @@ bool RegisterIO_I2C::Init() {
 
 bool RegisterIO_I2C::Write(uint8_t address, uint8_t value ) {
 	std::unique_lock<priority_mutex> sync(imu_mutex);
-    bool success = port->Write(address | 0x80, value);
-    if ( !success && trace ) printf("navX-MXP I2C Write error\n");
-    return success;
+    bool aborted = port->Write(address | 0x80, value);
+    if (aborted && trace) printf("navX-MXP I2C Write error\n");
+    return !aborted;
 }
 
 static int MAX_WPILIB_I2C_READ_BYTES = 127;
@@ -51,4 +51,7 @@ bool RegisterIO_I2C::Shutdown() {
     return true;
 }
 
+void RegisterIO_I2C::EnableLogging(bool enable) {
+	trace = enable;
+}
 

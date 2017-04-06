@@ -1,4 +1,5 @@
 #include <Utils.hpp>
+#include <CANTalon.h>
 #include <WPILib.h>
 
 namespace Utils

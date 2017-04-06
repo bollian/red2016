@@ -8,13 +8,13 @@
 #ifndef SRC_SERIALIO_H_
 #define SRC_SERIALIO_H_
 
-#include <NAVX/AHRSProtocol.h>
-#include <NAVX/IBoardCapabilities.h>
-#include <NAVX/IIOCompleteNotification.h>
-#include <NAVX/IIOProvider.h>
-#include <NAVX/IMUProtocol.h>
-#include "WPILIb.h"
+#include <WPILib.h>
 #include <stdint.h>
+#include <NAVX/IIOProvider.h>
+#include <NAVX/AHRSProtocol.h>
+#include <NAVX/IMUProtocol.h>
+#include <NAVX/IIOCompleteNotification.h>
+#include <NAVX/IBoardCapabilities.h>
 
 class SerialIO : public IIOProvider {
 
@@ -39,6 +39,7 @@ class SerialIO : public IIOProvider {
     IIOCompleteNotification::BoardState board_state;
     IBoardCapabilities *board_capabilities;
     double last_valid_packet_time;
+    bool is_usb;
 
 public:
     SerialIO( SerialPort::Port port_id,
@@ -54,6 +55,7 @@ public:
     void ZeroDisplacement();
     void Run();
     void Stop();
+    void EnableLogging(bool enable);
 private:
 
     SerialPort *ResetSerialPort();
