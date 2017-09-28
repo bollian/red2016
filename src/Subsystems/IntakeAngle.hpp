@@ -17,6 +17,10 @@ namespace IntakeAngle
 	void processPID();
 	void enablePID(bool enable);
 
+	/**
+	 * Sets the turn rate of the intake arm.  Positive speeds move the arm up,
+	 * negative speeds move the arm down.
+	 */
 	void setSpeed(float speed);
 	void setDirection(Utils::VerticalDirection dir);
 
@@ -24,7 +28,13 @@ namespace IntakeAngle
 	Utils::VerticalDirection getDirection();
 	
 	void engageManualControl();
+
+	/**
+	 * Uses sensors to try and reach a specific angle from the horizontal.
+	 * Will use PID control only if OI says it's enabled
+	 */
 	void goToAngle(float degrees);
+
 	void interrupt();
 	State getState();
 	

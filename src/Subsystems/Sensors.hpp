@@ -12,24 +12,77 @@ namespace Sensors
 	void initialize();
 	void process();
 
-	float getRobotAngle(); // degrees
+	/**
+	 * Returns the angle (yaw) of the robot from it's position at bootup
+	 */
+	float getRobotAngle();
+
+	/**
+	 * Returns the angle (pitch) of the shooter from it's home position in degrees
+	 */
 	float getShooterAngle(); // degrees
-	float getIntakeAngle(); // degrees
 
-	float getShooterWheelRate(); // rotations per minute
+	/**
+	 * Returns the angle (pitch) of the intake arm from the horizontal in degrees
+	 */
+	float getIntakeAngle();
 
-	int getLidarDistance(); // centimeters
+	/**
+	 * Returns the spin rate of the shooter wheels in rotations per minute
+	 */
+	float getShooterWheelRate();
 
-	float getLeftEncoderDistance(); // centimeters
-	float getRightEncoderDistance(); // centimeters
+	/**
+	 * Returns the distance between the front of the robot and the object closest
+	 * in front of it, as measured by the LIDAR sensor in centimeters
+	 */
+	int getLidarDistance();
 
-	float getLeftEncoderSpeed(); // centimeters per second
-	float getRightEncoderSpeed(); // centimeters per second
+	/**
+	 * Returns the distance traveled by the left drive wheels since bootup in centimeters
+	 */
+	float getLeftEncoderDistance();
 
+	/**
+	 * Returns the distance traveled by the right drive wheels since bootup in centimeters
+	 */
+	float getRightEncoderDistance();
+
+	/**
+	 * Returns the current speed of the left drive train in centimeters per second
+	 */
+	float getLeftEncoderSpeed();
+
+	/**
+	 * Returns the current speed of the right drive train in centimeters per second
+	 */
+	float getRightEncoderSpeed();
+
+	/**
+	 * Returns whether the ball limit switch is being pressed by a ball, and therefore
+	 * if there's a ball ready to be shot
+	 */
 	bool isBallLimitPressed();
+
+	/**
+	 * Returns whether or not the shooter is in it's home position
+	 */
 	bool isShooterLimitPressed();
 
+	/**
+	 * Returns the current draw on a Power Distribution Panel channel in amperes
+	 */
 	float getCurrent(unsigned int channel);
+
+	/**
+	 * The below functions check to see if the corresponding sensors are allowed to be
+	 * used.  Function calls to Sensors that rely on disabled sensors will return some
+	 * default value instead of throwing an exception.  Because those default values
+	 * will be indistiguishable from a normally running sensor, you should always call
+	 * the corresponding isEnabled function, and have backup code for the disabled case.
+	 *
+	 * A sensor may be hard disabled or soft disabled.  Hard disabled means that the
+	 */
 
 	bool isGyroEnabled();
 	bool isShooterAngleEnabled();

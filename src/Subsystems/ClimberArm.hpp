@@ -9,6 +9,10 @@ namespace ClimberArm
 	void process();
 
 	void setSpeed(float speed);
+
+	/**
+	 * Sets the climber arm to a preset speed that is either up, down, or zero
+	 */
 	void setDirection(Utils::VerticalDirection dir);
 	float getSpeed();
 	Utils::VerticalDirection getDirection();

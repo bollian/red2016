@@ -6,7 +6,14 @@ namespace Cameras
 	void initialize();
 	void process();
 
+	/**
+	 * Updates the current tracking location with the latest information from the RPi
+	 */
 	void refreshContours();
+
+	/**
+	 * @return true if there is a recognizable goal in sight of the camera
+	 */
 	bool canSeeGoal();
 
 	/**

@@ -16,6 +16,11 @@ namespace HolderWheels
 	};
 	
 	void engageManualControl();
+
+	/**
+	 * Pushes the ball forward into the shooter wheels for a small period of time.
+	 * If the shooter wheels are on, this results in the ball being shot.
+	 */
 	void shootBall();
 	void interrupt();
 	State getState();
